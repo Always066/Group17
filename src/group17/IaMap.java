@@ -1,3 +1,6 @@
+/*This code come from the Blog : https://robinluonanjing.github.io/UoSouthampton-Intelligent-Agent-Docs/basic/
+* */
+
 package group17;
 
 import genius.core.Bid;

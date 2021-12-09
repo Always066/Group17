@@ -26,11 +26,12 @@ import genius.core.utility.UtilitySpace;
  */
 public class Agent17 extends AbstractNegotiationParty {
     private static double rankThreshold;
-    private double MINIMUM_TARGET = 0.5;
+    private double MINIMUM_TARGET = 0.7;
     private Bid lastOffer;
     private JhonnyBlackModel jhonnyBlackModel;
     NegotiationInfo info;
     IaMap iaMap;
+
 
     /**
      * Initializes a new instance of the agent.
@@ -40,11 +41,13 @@ public class Agent17 extends AbstractNegotiationParty {
         super.init(info);
         this.info = info;
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-        AbstractUtilitySpace utilitySpace = info.getUtilitySpace();
-        jhonnyBlackModel = new JhonnyBlackModel((AdditiveUtilitySpace) utilitySpace);
+        UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(), userModel);
+        jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
         rankThreshold = 0;
         Describe();
         iaMap = new IaMap(userModel);
+        double[][] a = utilitySpace.getFrequency();
+        double[][] b = utilitySpace.getOption_value();
     }
 
 
@@ -111,6 +114,7 @@ public class Agent17 extends AbstractNegotiationParty {
             boolean result = rank <= (noRanks * rankThreshold);
             System.out.println("Within threshold? " + result);
             result = result && getUtility(bid) >= MINIMUM_TARGET;
+            System.out.println("是否接收：" + getUtility(bid));
             return result;
         }
 
@@ -126,6 +130,7 @@ public class Agent17 extends AbstractNegotiationParty {
         boolean result = rank <= (noRanks * rankThreshold);
         System.out.println("Within threshold? " + result);
         result = result && getUtility(bid) >= MINIMUM_TARGET;
+        System.out.println("是否接收：" + getUtility(bid));
         return result;
     }
 
@@ -144,20 +149,14 @@ public class Agent17 extends AbstractNegotiationParty {
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
         for (int i = 0; i < noRanks; i++) {
             Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
-            double o1 = jhonnyBlackModel.valuation_opponent(bid);
-//            double o2 = iaMap.JBpredict(bid);
-            double o3 = getUtility(bid);
-//            System.out.println("我实现的JB" + o1 + ", 学长实现的JB：" + o2 + " 我们的utility:" + o3 + " Social Utility: " + o2 * o3);
+            double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
+            double o3 = getUtility(bid); //user获得的utility
             if (o1 * rankThreshold * o3 > max_utility && getUtility(bid) > MINIMUM_TARGET) {
                 output = bid;
                 max_utility = o1 * o3 * rankThreshold;
             }
         }
-//        System.out.println("咱就是说，这波出价：" + getUtility(output));
-//        System.out.println();
-//        System.out.println();
 
-//        output = bidRanking.getBidOrder().get(0);
         return output;
     }
 

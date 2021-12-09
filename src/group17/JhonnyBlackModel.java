@@ -103,27 +103,3 @@ public class JhonnyBlackModel {
         return utility;
     }
 }
-
-class JhonnyValue implements Comparator<JhonnyValue>{
-
-    private Value value;
-    private int count;
-    private int rank;
-    private double computed;
-
-    public void AddCount(){
-        count++;
-    }
-
-    public JhonnyValue(Value v){
-        value = v;
-        count=0;
-        rank=0;
-        computed = 0.0f;
-    }
-
-    @Override
-    public int compare(JhonnyValue o1, JhonnyValue o2) {
-        return 0;
-    }
-}

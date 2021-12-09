@@ -16,6 +16,7 @@ import genius.core.parties.NegotiationInfo;
 import genius.core.uncertainty.BidRanking;
 import genius.core.utility.AbstractUtilitySpace;
 import genius.core.utility.AdditiveUtilitySpace;
+import genius.core.utility.UtilitySpace;
 
 /**
  * A simple example agent that makes random bids above a minimum target utility.
@@ -25,9 +26,9 @@ import genius.core.utility.AdditiveUtilitySpace;
  */
 public class Agent17 extends AbstractNegotiationParty {
     private static double rankThreshold;
-    private double MINIMUM_TARGET = 0.7;
+    private double MINIMUM_TARGET = 0.5;
     private Bid lastOffer;
-    private JhonnyBlackModel jhonyBlackModel;
+    private JhonnyBlackModel jhonnyBlackModel;
     NegotiationInfo info;
     IaMap iaMap;
 
@@ -40,7 +41,7 @@ public class Agent17 extends AbstractNegotiationParty {
         this.info = info;
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
         AbstractUtilitySpace utilitySpace = info.getUtilitySpace();
-        jhonyBlackModel = new JhonnyBlackModel((AdditiveUtilitySpace) utilitySpace);
+        jhonnyBlackModel = new JhonnyBlackModel((AdditiveUtilitySpace) utilitySpace);
         rankThreshold = 0;
         Describe();
         iaMap = new IaMap(userModel);
@@ -57,22 +58,23 @@ public class Agent17 extends AbstractNegotiationParty {
         // Check for acceptance if we have received an offer
         if (lastOffer != null) {
 
-            rankThreshold = Math.pow(timeline.getTime(), 10);
+            rankThreshold = Math.pow(timeline.getTime(), 1.8);
 
             System.out.println("Current threshold: " + rankThreshold);
-            System.out.println();
+
+            //当时间不到最后一刻
             if (timeline.getTime() >= 0.99) {
                 if (isRankAboveThreshold(lastOffer))
                     return new Accept(getPartyId(), lastOffer);
                 else
                     return new EndNegotiation(getPartyId());
-            } else if (isRankAboveThreshold(lastOffer)) {
+            }
+            //检查报价是否符合我们的预期
+            else if (isRankAboveThreshold(lastOffer)) {
                 return new Accept(getPartyId(), lastOffer);
             }
         }
-
-        // Otherwise, send out a random offer above the target utility
-
+        // 不符合我们的给出新的报价
         return new Offer(getPartyId(), getRandomBidAboveThreshold());
     }
 
@@ -102,11 +104,13 @@ public class Agent17 extends AbstractNegotiationParty {
         if (bidOrder.contains(bid)) {
             // True if above rank, false otherwise
             int noRanks = bidRanking.getSize();
-            System.out.println("No. of ranks: " + noRanks);
+            System.out.println("Lovely this bid didn't contain \nNo. of ranks: " + noRanks);
             int rank = bidRanking.indexOf(bid); // Highest index is ranked best
             System.out.println("Rank of bid: " + rank);
+            System.out.println("We expect rank: " + noRanks * rankThreshold);
             boolean result = rank <= (noRanks * rankThreshold);
             System.out.println("Within threshold? " + result);
+            result = result && getUtility(bid) >= MINIMUM_TARGET;
             return result;
         }
 
@@ -115,35 +119,44 @@ public class Agent17 extends AbstractNegotiationParty {
         bidRanking = userModel.getBidRanking();
 
         int noRanks = bidRanking.getSize();
-        System.out.println("No. of ranks: " + noRanks);
+        System.out.println("Unfortunately this bid didn't contain \nNo. of ranks: " + noRanks);
         int rank = bidRanking.indexOf(bid); // Highest index is ranked best
         System.out.println("Rank of bid: " + rank);
+        System.out.println("We expect rank: " + noRanks * rankThreshold);
         boolean result = rank <= (noRanks * rankThreshold);
         System.out.println("Within threshold? " + result);
+        result = result && getUtility(bid) >= MINIMUM_TARGET;
         return result;
     }
 
 
     private Bid getRandomBidAboveThreshold() {
+        /*This function generate the bid with utility above the threshold*/
         BidRanking bidRanking = userModel.getBidRanking();
         int noRanks = bidRanking.getSize();
         System.out.println("No ranks: " + noRanks);
-        int thresholdedRanks = (int) (noRanks * rankThreshold);
+        int thresholdRanks = (int) (noRanks * rankThreshold);
         System.out.println("Ranks within threshold: " + noRanks);
         Random rand = new Random();
-        int randRank = rand.nextInt(thresholdedRanks + 1);
+        int randRank = rand.nextInt(thresholdRanks + 1);
         System.out.println("Random rank = " + randRank);
         double max_utility = 0;
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-        for (int i = 0; i < thresholdedRanks && timeline.getTime() > 0.8; i++) {
-            Bid bid = bidRanking.getBidOrder().get(i);
-            double o1 = jhonyBlackModel.valuation_opponent(bid);
-            double o2 = iaMap.JBpredict(bid);
-            System.out.println("我实现的JB" + o1 + ", 学长实现的JB：" + o2);
-            if (o1 * utilitySpace.getUtility(bid) > max_utility) {
+        for (int i = 0; i < noRanks; i++) {
+            Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
+            double o1 = jhonnyBlackModel.valuation_opponent(bid);
+//            double o2 = iaMap.JBpredict(bid);
+            double o3 = getUtility(bid);
+//            System.out.println("我实现的JB" + o1 + ", 学长实现的JB：" + o2 + " 我们的utility:" + o3 + " Social Utility: " + o2 * o3);
+            if (o1 * rankThreshold * o3 > max_utility && getUtility(bid) > MINIMUM_TARGET) {
                 output = bid;
+                max_utility = o1 * o3 * rankThreshold;
             }
         }
+//        System.out.println("咱就是说，这波出价：" + getUtility(output));
+//        System.out.println();
+//        System.out.println();
+
 //        output = bidRanking.getBidOrder().get(0);
         return output;
     }
@@ -176,11 +189,12 @@ public class Agent17 extends AbstractNegotiationParty {
     public void receiveMessage(AgentID sender, Action action) {
         if (action instanceof Offer) {
             lastOffer = ((Offer) action).getBid();
-            jhonyBlackModel.update_model(lastOffer);
+            jhonnyBlackModel.update_model(lastOffer);
             iaMap.JonnyBlack(lastOffer);
-            double o1 = jhonyBlackModel.valuation_opponent(lastOffer);
+            double o1 = jhonnyBlackModel.valuation_opponent(lastOffer);
             double o2 = iaMap.JBpredict(lastOffer);
-            System.out.println("我实现的JB" + o1 + ", 学长实现的JB：" + o2);
+            double o3 = getUtilitySpace().getUtility(lastOffer);
+            System.out.println("收到报价阶段，我实现的JB" + o1 + ", 学长实现的JB：" + o2 + ",目前我的模型的utility: " + o3);
 
         }
 

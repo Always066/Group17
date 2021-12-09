@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome exception="Failed to execute protocol: Negotiating party Agent17@1 timed out in chooseAction() method.: agent Agent17@1 passed deadline and was killed" currentTime="Wed Dec 08 13:29:24 GMT 2021" lastAction="(Offer  bid:Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Party Room, Invitations: Custom, Printed, Music: DJ, Cleanup: Specialized Materials])" bids="1" runtime="105.982797561" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>

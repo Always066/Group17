@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<agentsStatistics>
+    <statistics>
+        <agentname>negotiator.parties.BoulwareNegotiationParty</agentname>
+        <totalUndiscountedUtility>1.504779885014196</totalUndiscountedUtility>
+        <totalDiscountedUtility>1.504779885014196</totalDiscountedUtility>
+        <numberOfSessions>4</numberOfSessions>
+        <totalNashDist>2.3562773831963364</totalNashDist>
+        <totalWelfare>3.009559770028392</totalWelfare>
+        <totalParetoDistance>2.219488755095835</totalParetoDistance>
+        <meanDiscounted>0.376194971253549</meanDiscounted>
+        <meanNashDistance>0.5890693457990841</meanNashDistance>
+        <meanParetoDistance>0.5548721887739587</meanParetoDistance>
+        <meanUndiscounted>0.376194971253549</meanUndiscounted>
+        <meanWelfare>0.752389942507098</meanWelfare>
+    </statistics>
+    <statistics>
+        <agentname>/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class</agentname>
+        <totalUndiscountedUtility>0.0</totalUndiscountedUtility>
+        <totalDiscountedUtility>0.0</totalDiscountedUtility>
+        <numberOfSessions>4</numberOfSessions>
+        <totalNashDist>4.0</totalNashDist>
+        <totalWelfare>0.0</totalWelfare>
+        <totalParetoDistance>4.0</totalParetoDistance>
+        <meanDiscounted>0.0</meanDiscounted>
+        <meanNashDistance>1.0</meanNashDistance>
+        <meanParetoDistance>1.0</meanParetoDistance>
+        <meanUndiscounted>0.0</meanUndiscounted>
+        <meanWelfare>0.0</meanWelfare>
+    </statistics>
+</agentsStatistics>

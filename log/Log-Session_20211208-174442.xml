@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@1:java.lang.NullPointerException: null" currentTime="Wed Dec 08 17:44:42 GMT 2021" lastAction="(Offer  bid:Bid[Food: Chips and Nuts, Drinks: Beer Only, Location: Party Room, Invitations: Custom, Handmade, Music: DJ, Cleanup: Specialized Materials])" bids="1" runtime="0.016615479" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>

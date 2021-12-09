@@ -1,0 +1,161 @@
+<?xml version="1.0" ?><Tournament>
+<NegotiationOutcome runtime="0.167226166" finalOutcome="Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Photo, Music: Band, Cleanup: Specialized Materials]" startingAgent="BoulwareNegotiationParty@0" currentTime="Wed Dec 08 16:48:09 GMT 2021" timeOfAgreement="0.9344262295081968" lastAction="(Accept  bid:Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Photo, Music: Band, Cleanup: Specialized Materials])" domain="etc/templates/partydomain/party_domain.xml" bids="207" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty@0" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.624609679881641" finalUtility="0.624609679881641" discountedUtility="0.624609679881641" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty@1" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.45246919686765785" finalUtility="0.45246919686765785" discountedUtility="0.45246919686765785" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty@2" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.8401159007943011" finalUtility="0.8401159007943011" discountedUtility="0.8401159007943011" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty@3" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.571428075" finalUtility="0.571428075" discountedUtility="0.571428075" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@4:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:09 GMT 2021" lastAction="null" bids="0" runtime="0.014212186" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome runtime="0.164956721" finalOutcome="Bid[Food: Catering, Drinks: Beer Only, Location: Your Dorm, Invitations: Custom, Handmade, Music: DJ, Cleanup: Specialized Materials]" startingAgent="BoulwareNegotiationParty@8" currentTime="Wed Dec 08 16:48:10 GMT 2021" timeOfAgreement="0.8852459016393442" lastAction="(Accept  bid:Bid[Food: Catering, Drinks: Beer Only, Location: Your Dorm, Invitations: Custom, Handmade, Music: DJ, Cleanup: Specialized Materials])" domain="etc/templates/partydomain/party_domain.xml" bids="203" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty@8" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.7312335749610556" finalUtility="0.7312335749610556" discountedUtility="0.7312335749610556" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17@9" agentDesc="Places random bids &gt;= 0.7" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="group17.Agent17" userUtility="0.2810986128319093" finalUtility="0.2810986128319093" discountedUtility="0.2810986128319093" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty@10" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.5538962755896539" finalUtility="0.5538962755896539" discountedUtility="0.5538962755896539" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty@11" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.6904755750000001" finalUtility="0.6904755750000001" discountedUtility="0.6904755750000001" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@12:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="null" bids="0" runtime="0.006795454" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@18:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="(Offer  bid:Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap])" bids="2" runtime="0.008202985" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@20:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="null" bids="0" runtime="0.006713086" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@26:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="(Offer  bid:Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap])" bids="2" runtime="0.011686811" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@28:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="null" bids="0" runtime="0.008522074" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@35:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="(Offer  bid:Bid[Food: Chips and Nuts, Drinks: Non-Alcoholic, Location: Party Tent, Invitations: Plain, Music: Band, Cleanup: Hired Help])" bids="3" runtime="0.009974505" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@36:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="null" bids="0" runtime="0.005910516" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@43:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:10 GMT 2021" lastAction="(Offer  bid:Bid[Food: Chips and Nuts, Drinks: Non-Alcoholic, Location: Party Tent, Invitations: Plain, Music: Band, Cleanup: Hired Help])" bids="3" runtime="0.010675665" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@44:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:11 GMT 2021" lastAction="null" bids="0" runtime="0.007058045" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@50:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:11 GMT 2021" lastAction="(Offer  bid:Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap])" bids="2" runtime="0.00752337" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@52:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:11 GMT 2021" lastAction="null" bids="0" runtime="0.005963654" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@58:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:11 GMT 2021" lastAction="(Offer  bid:Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap])" bids="2" runtime="0.010207801" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17@60:java.lang.NullPointerException: null" currentTime="Wed Dec 08 16:48:11 GMT 2021" lastAction="null" bids="0" runtime="0.006354042" deadline="60rounds">
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17" utilspace="etc/templates/partydomain/party4_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17/Agent17.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome></Tournament>

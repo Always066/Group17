@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="group17">
+    <output-path>$PROJECT_DIR$/out/artifacts/group17</output-path>
+    <root id="archive" name="group17.jar">
+      <element id="directory" name="group17">
+        <element id="dir-copy" path="$PROJECT_DIR$/src/group17" />
+        <element id="dir-copy" path="$PROJECT_DIR$/out/production/Group17/group17" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.*;
 
+import PSO.MyPos;
 import genius.core.AgentID;
 import genius.core.Bid;
 import genius.core.actions.Accept;
@@ -32,7 +33,7 @@ public class Agent17 extends AbstractNegotiationParty {
     private JhonnyBlackModel jhonnyBlackModel;
     NegotiationInfo info;
     IaMap iaMap;
-
+    MyPos pos;
 
     /**
      * Initializes a new instance of the agent.
@@ -49,6 +50,8 @@ public class Agent17 extends AbstractNegotiationParty {
         iaMap = new IaMap(userModel);
         double[][] a = utilitySpace.getFrequency();
         double[][] b = utilitySpace.getOption_value();
+        pos = new MyPos(1000,userModel);
+        pos.iterMultipleTimes(100);
     }
 
 

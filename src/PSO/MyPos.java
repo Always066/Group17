@@ -1,6 +1,17 @@
 package PSO;
 
+import genius.core.Domain;
+import genius.core.issue.Issue;
+import genius.core.issue.IssueDiscrete;
+import genius.core.issue.ValueDiscrete;
+import genius.core.uncertainty.AdditiveUtilitySpaceFactory;
+import genius.core.uncertainty.UserModel;
 import genius.core.utility.AbstractUtilitySpace;
+import genius.core.Bid;
+import genius.core.utility.AdditiveUtilitySpace;
+import genius.core.utility.EvaluatorDiscrete;
+
+import java.util.*;
 
 public class MyPos {
 
@@ -179,10 +190,9 @@ public class MyPos {
 }
 
 
-class Particle{
-    public double[] w;
-    public double[][] v;
-
+class Particle {
+    public AbstractUtilitySpace abstractUtilitySpaces;
+    public Domain domain;
     public double f; //fitness value
     public double[] v; //速度
     public int size;
@@ -197,5 +207,37 @@ class Particle{
         v = new double[size];
         initializeArrayV();
         this.vmax = 1.0f;
+    }
+
+    //产生一个随机的效用空间
+    private AbstractUtilitySpace getRandomChromosome() {
+        Random random = new Random();
+        AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(domain);  //直接获得当前utilitySpace下的domain.
+        List<Issue> issues = additiveUtilitySpaceFactory.getDomain().getIssues();
+
+
+        size += issues.size();
+        for (Issue issue : issues) {
+            additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble());    //设置每个issue的权重
+            IssueDiscrete values = (IssueDiscrete) issue;       //将issue强制转换为values集合
+            size += ((IssueDiscrete) issue).getNumberOfValues();
+            for (ValueDiscrete value : values.getValues()) {
+                //通过values集合，获取每个value。
+                additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble());
+                //因为现在是累加效用空间，随便设置一个权重之后，可以对当前这个value设置一个效用，效用随机。
+
+            }
+            //当效用确定了之后，当前的value自己本身的值也就确定了。
+            //这里设置的效用是设置value的evaluation
+        }
+        additiveUtilitySpaceFactory.normalizeWeights(); //因为之前对每个value的效用值计算都是随机的，这个时候，需要归一化。
+        return additiveUtilitySpaceFactory.getUtilitySpace();  //生成一个效用空间之后，返回这个效用空间。
+    }
+
+    private void initializeArrayV() {
+        Random random = new Random();
+        for (int i = 0; i < v.length; i++) {
+            v[i] = 0 + (vmax - 0) * random.nextDouble();
+        }
     }
 }

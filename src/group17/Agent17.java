@@ -42,7 +42,7 @@ public class Agent17 extends AbstractNegotiationParty {
         super.init(info);
         this.info = info;
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-        UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),(UserModel) userModel);
+        UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),userModel);
         jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
         rankThreshold = 0;
         Describe();
@@ -98,8 +98,8 @@ public class Agent17 extends AbstractNegotiationParty {
      * Check if the rank of offer is above the threshold.
      * Elicit the offer if needed
      *
-     * @param bid
-     * @return
+
+
      */
     private boolean isRankAboveThreshold(Bid bid) {
         // Check if bid is in current ranking

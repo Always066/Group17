@@ -61,8 +61,8 @@ public class Agent17 extends AbstractNegotiationParty {
         // Check for acceptance if we have received an offer
         if (lastOffer != null) {
 
-            rankThreshold = Math.pow(timeline.getTime(), 1.8);
-
+            rankThreshold = Math.pow(timeline.getTime(), 8);
+            rankThreshold = Math.min(rankThreshold, 0.3);
             System.out.println("Current threshold: " + rankThreshold);
 
             //当时间不到最后一刻
@@ -111,10 +111,8 @@ public class Agent17 extends AbstractNegotiationParty {
             int rank = bidRanking.indexOf(bid); // Highest index is ranked best
             System.out.println("Rank of bid: " + rank);
             System.out.println("We expect rank: " + noRanks * rankThreshold);
-            boolean result = rank <= (noRanks * rankThreshold);
+            boolean result = (noRanks - rank) <= (noRanks * rankThreshold);
             System.out.println("Within threshold? " + result);
-            result = result && getUtility(bid) >= MINIMUM_TARGET;
-            System.out.println("是否接收：" + getUtility(bid));
             return result;
         }
 
@@ -127,10 +125,8 @@ public class Agent17 extends AbstractNegotiationParty {
         int rank = bidRanking.indexOf(bid); // Highest index is ranked best
         System.out.println("Rank of bid: " + rank);
         System.out.println("We expect rank: " + noRanks * rankThreshold);
-        boolean result = rank <= (noRanks * rankThreshold);
+        boolean result = (noRanks - rank) <= (noRanks * rankThreshold);
         System.out.println("Within threshold? " + result);
-        result = result && getUtility(bid) >= MINIMUM_TARGET;
-        System.out.println("是否接收：" + getUtility(bid));
         return result;
     }
 
@@ -147,15 +143,15 @@ public class Agent17 extends AbstractNegotiationParty {
         System.out.println("Random rank = " + randRank);
         double max_utility = 0;
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-        for (int i = 0; i < noRanks; i++) {
-            Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
-            double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
-            double o3 = getUtility(bid); //user获得的utility
-            if (o1 * rankThreshold * o3 > max_utility && getUtility(bid) > MINIMUM_TARGET) {
-                output = bid;
-                max_utility = o1 * o3 * rankThreshold;
-            }
-        }
+//        for (int i = 0; i < noRanks; i++) {
+//            Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
+//            double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
+//            double o3 = getUtility(bid); //user获得的utility
+//            if (o1 * rankThreshold * o3 > max_utility && getUtility(bid) > MINIMUM_TARGET) {
+//                output = bid;
+//                max_utility = o1 * o3 * rankThreshold;
+//            }
+//        }
 
         return output;
     }

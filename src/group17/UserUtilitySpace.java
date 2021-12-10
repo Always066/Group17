@@ -18,29 +18,18 @@ public class UserUtilitySpace extends AdditiveUtilitySpace {
     private List<Bid> bidList;
     private double[][] frequency;
     private double[][] option_value;
-    private Map<Pair<Integer, Value>, Integer> optionCountMap;
-
+    private double[] weights;
 
     public UserUtilitySpace(AdditiveUtilitySpace us, UserModel userModel) {
         super(us);
         this.userModel = userModel;
-        List<Issue> issues = us.getDomain().getIssues();
-        int value_number = ((IssueDiscrete) userModel.getDomain().getIssues().get(0)).getValues().size();
-        frequency = new double[issues.size()][value_number];
-        option_value = new double[issues.size()][value_number];
-        optionCountMap = new HashMap<>();
-        for (Issue issue : issues) {
-            int issueNumber = issue.getNumber();
-            IssueDiscrete issueDiscrete = (IssueDiscrete) issue;
-            for (ValueDiscrete valueDiscrete : issueDiscrete.getValues()) {
-                optionCountMap.put(new Pair<>(issueNumber, valueDiscrete), issueDiscrete.getValueIndex(valueDiscrete));
-            }
-        }
         bidList = userModel.getBidRanking().getBidOrder();
-
+        weights = new double[userModel.getDomain().getIssues().size()];
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] = new Random().nextDouble();
+        }
+        normalize();
         update_matrix();
-
-        Update();
     }
 
     private void Update() {
@@ -59,9 +48,15 @@ public class UserUtilitySpace extends AdditiveUtilitySpace {
     Option value 使用jhonny black 建模
      */
     private void update_matrix() {
+        List<Issue> issues = userModel.getDomain().getIssues();
+        int value_number = ((IssueDiscrete) userModel.getDomain().getIssues().get(0)).getValues().size();
+        frequency = new double[issues.size()][value_number];
+        option_value = new double[issues.size()][value_number];
+        //how many line segments
+        double nLineSegments = 100.0;
         for (int i = 0; i < bidList.size(); i++) {
-            Bid b = bidList.get(0);
-            double factor = Math.pow(i + 1, 1.5);
+            Bid b = bidList.get(i);
+            double factor = i % Math.round((double) bidList.size() / nLineSegments) + 1;
             for (Map.Entry<Integer, Value> entry : b.getValues().entrySet()) {
                 IssueDiscrete issue = (IssueDiscrete) b.getIssues().get(entry.getKey() - 1);
                 int value_index = issue.getValueIndex((ValueDiscrete) entry.getValue());
@@ -104,6 +99,13 @@ public class UserUtilitySpace extends AdditiveUtilitySpace {
         //把integer array 转化为 Integer array
         Integer[] integers = Arrays.stream(index_array).boxed().toArray(Integer[]::new);
         return integers;
+    }
+
+    private void normalize() {
+        double sum = Arrays.stream(weights).sum();
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] /= sum;
+        }
     }
 
 

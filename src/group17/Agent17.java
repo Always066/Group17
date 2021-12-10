@@ -14,6 +14,7 @@ import genius.core.actions.Offer;
 import genius.core.parties.AbstractNegotiationParty;
 import genius.core.parties.NegotiationInfo;
 import genius.core.uncertainty.BidRanking;
+import genius.core.uncertainty.UserModel;
 import genius.core.utility.AbstractUtilitySpace;
 import genius.core.utility.AdditiveUtilitySpace;
 import genius.core.utility.UtilitySpace;
@@ -41,7 +42,7 @@ public class Agent17 extends AbstractNegotiationParty {
         super.init(info);
         this.info = info;
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-        UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(), userModel);
+        UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),(UserModel) userModel);
         jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
         rankThreshold = 0;
         Describe();

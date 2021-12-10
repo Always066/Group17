@@ -143,15 +143,15 @@ public class Agent17 extends AbstractNegotiationParty {
         System.out.println("Random rank = " + randRank);
         double max_utility = 0;
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-//        for (int i = 0; i < noRanks; i++) {
-//            Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
-//            double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
-//            double o3 = getUtility(bid); //user获得的utility
-//            if (o1 * rankThreshold * o3 > max_utility && getUtility(bid) > MINIMUM_TARGET) {
-//                output = bid;
-//                max_utility = o1 * o3 * rankThreshold;
-//            }
-//        }
+        for (int i = 0; i < thresholdRanks; i++) {
+            Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
+            double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
+            double o3 = getUtility(bid); //user获得的utility
+            if (o1 > max_utility) {
+                output = bid;
+                max_utility = o1;
+            }
+        }
 
         return output;
     }

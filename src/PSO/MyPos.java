@@ -21,21 +21,23 @@ public class MyPos {
     Particle[] bestParticles;
     double w;//惯性系数
 
-    Particle gBest; // global maximization
+    Particle globalBest; // global maximization
     double vMax; // maximised value
     int c1, c2; // 个体最优的学习参数和全局最优的学习参数
     List<Bid> BestBidList; //原始的bid list Ranking
     Random random;
+    private double maxf = Double.MAX_VALUE;
 
     public MyPos(int n, UserModel userModel) {
         this.n = n;
         c1 = c2 = 2;
         initParticles(userModel);
-        updateBest(particles[0]);
         BestBidList = userModel.getBidRanking().getBidOrder();
         setFitness();
         w = 0.5;
         random = new Random();
+        getBestParticles();
+
     }
 
     //计算两个utitlityspace的差
@@ -43,7 +45,7 @@ public class MyPos {
         double[] v = particles[index].v;
         AdditiveUtilitySpace present = (AdditiveUtilitySpace) particles[index].abstractUtilitySpaces;
         AdditiveUtilitySpace presentBest = (AdditiveUtilitySpace) bestParticles[index].abstractUtilitySpaces;
-        AdditiveUtilitySpace best = (AdditiveUtilitySpace) gBest.abstractUtilitySpaces;
+        AdditiveUtilitySpace best = (AdditiveUtilitySpace) globalBest.abstractUtilitySpaces;
         int issueSIze = particles[index].abstractUtilitySpaces.getDomain().getIssues().size();//有多少个issue
 
         AdditiveUtilitySpaceFactory newAddictiveUtilitySpace = new AdditiveUtilitySpaceFactory(present.getDomain());
@@ -59,6 +61,7 @@ public class MyPos {
                     + c2 * random.nextDouble() * (bestWeight - presentWeight);
             particles[index].v[iterNumV] = vNext;
             double valueNumber = Double.max(presentWeight + vNext, Double.MIN_VALUE);
+            valueNumber = Double.min(valueNumber, 1);
             newAddictiveUtilitySpace.setWeight(issue, valueNumber);
             iterNumV++;
 
@@ -89,42 +92,40 @@ public class MyPos {
     }
 
     public void iterParticles() {
+        setFitness();
         for (int i = 0; i < particles.length; i++) {
             updateV(i);
         }
-        setFitness();
+        getBestParticles();
         //全部的更新之后再求一次全局最优
-        System.out.println("这轮建模完事了：" + "最好的结果是:" + gBest.f + "\n");
+        System.out.println("这轮建模完事了：" + "最好的结果是:" + globalBest.f + "\n");
     }
 
     public void iterMultipleTimes(int maximum) {
         for (int i = 0; i < maximum; i++) {
-            double a = particles[0].abstractUtilitySpaces.getUtility(BestBidList.get(55));
-            for (Bid b : BestBidList) {
-                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
-            }
-            System.out.println();
+
+//            for (Bid b : BestBidList) {
+//                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
+//            }
+//            System.out.println();
+
             iterParticles();
-            for (Bid b : BestBidList) {
-                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
-            }
-            System.out.println();
+
+//            for (Bid b : BestBidList) {
+//                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
+//            }
+//            System.out.println();
         }
     }
 
     //获得全局最优
     private void getBestParticles() {
-        double maxf = gBest.f;
         for (Particle p : particles) {
             if (p.f < maxf) {
-                updateBest(p);
+                globalBest = p.clone();
                 maxf = p.f;
             }
         }
-    }
-
-    private void updateBest(Particle p) {
-        gBest = p;
     }
 
     void initParticles(UserModel userModel) {
@@ -151,12 +152,10 @@ public class MyPos {
         }
 
         for (int i = 0; i < particles.length; i++) {
-            if (particles[i].f > bestParticles[i].f) {
+            if (particles[i].f < bestParticles[i].f) {
                 bestParticles[i] = particles[i];
             }
         }
-
-        getBestParticles();
     }
 
     private double changeErrorToFitness(double error) {
@@ -201,7 +200,7 @@ public class MyPos {
 }
 
 
-class Particle {
+class Particle implements Cloneable {
     public AdditiveUtilitySpace abstractUtilitySpaces;
     public Domain domain;
     public double f; //fitness value
@@ -245,6 +244,22 @@ class Particle {
     private void initializeArrayV() {
         for (int i = 0; i < v.length; i++) {
             v[i] = 0f + (vmax - 0f) * Math.random();
+        }
+    }
+
+    @Override
+    public Particle clone() {
+        try {
+            Particle clone = (Particle) super.clone();
+            clone.f = f;
+            clone.v = v;
+            clone.size = size;
+            clone.abstractUtilitySpaces = abstractUtilitySpaces;
+            clone.domain = domain;
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

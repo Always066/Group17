@@ -53,8 +53,8 @@ public class Agent17 extends AbstractNegotiationParty {
         iaMap = new IaMap(userModel);
         double[][] a = utilitySpace.getFrequency();
         double[][] b = utilitySpace.getOption_value();
-        pos = new MyPos(1000,userModel);
-        pos.iterMultipleTimes(100);
+        pos = new MyPos(3000,userModel);
+        pos.iterMultipleTimes(5);
     }
 
 

@@ -7,6 +7,7 @@ import genius.core.issue.ValueDiscrete;
 import genius.core.utility.AdditiveUtilitySpace;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MyJonnyBlack {
     private List<Issue> issues;
@@ -41,8 +42,7 @@ public class MyJonnyBlack {
             currentCount = frequencyTable.get(issue.getNumber()).get(valueName);
             frequencyTable.get(issue.getNumber()).put(valueName, currentCount + 1);
         }
-        double ValueJonnyBlack = predictValuation(receivedBid);
-        return ValueJonnyBlack;
+        return predictValuation(receivedBid);
     }
 
     private double predictValuation(Bid bid) {
@@ -51,10 +51,8 @@ public class MyJonnyBlack {
 
         for (int issueIndex = 1; issueIndex <= frequencyTable.size(); issueIndex++) {
             HashMap<String, Integer> map = frequencyTable.get(issueIndex);
-            int sumFrequency = 0;
-            for (int value : map.values()) {
-                sumFrequency += value;
-            }
+            int sumFrequency;
+            sumFrequency = (int) map.values().stream().collect(Collectors.summarizingInt(x->x.intValue())).getSum();
 
             int issueSize = map.size();
             double[] singleWeight = new double[issueSize];

@@ -9,6 +9,7 @@ import genius.core.uncertainty.UserModel;
 import genius.core.utility.AbstractUtilitySpace;
 import genius.core.Bid;
 import genius.core.utility.AdditiveUtilitySpace;
+import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
 import java.util.*;
@@ -28,13 +29,13 @@ public class MyPos {
 
     public MyPos(int n, UserModel userModel) {
         this.n = n;
-        c1=c2=2;
+        c1 = c2 = 2;
         initParticles(userModel);
+        updateBest(particles[0]);
         BestBidList = userModel.getBidRanking().getBidOrder();
         setFitness();
         w = 0.5;
         random = new Random();
-
     }
 
     //计算两个utitlityspace的差
@@ -47,44 +48,40 @@ public class MyPos {
 
         AdditiveUtilitySpaceFactory newAddictiveUtilitySpace = new AdditiveUtilitySpaceFactory(present.getDomain());
         int iterNumV = 0; //吐槽一下这里，v是一个数组所以算位置
-        for (int i = 0; i < issueSIze; i++) {
-            IssueDiscrete issue = (IssueDiscrete) particles[index].abstractUtilitySpaces.getDomain().getIssues().get(i);
-            IssueDiscrete bestIssue = (IssueDiscrete) best.getDomain().getIssues().get(i);
-            IssueDiscrete presentBestIssue = (IssueDiscrete) presentBest.getDomain().getIssues().get(i);
-
+        for (Issue issue_ : present.getDomain().getIssues()) {
+            IssueDiscrete issue = (IssueDiscrete) issue_;
+            double presentBestWeight = presentBest.getWeight(issue);
+            double presentWeight = present.getWeight(issue);
+            double bestWeight = best.getWeight(issue);
             //更新一个weight
             double vNext = w * v[iterNumV] +
-                    c1 * random.nextDouble() * (presentBest.getWeight(i) - present.getWeight(i))
-                    + c2 * random.nextDouble() * (best.getWeight(i) - present.getWeight(i));
-            particles[index].v[iterNumV]=vNext;
-            double valueNumber = Double.max(present.getWeight(i) + vNext, 0);
+                    c1 * random.nextDouble() * (presentBestWeight - presentWeight)
+                    + c2 * random.nextDouble() * (bestWeight - presentWeight);
+            particles[index].v[iterNumV] = vNext;
+            double valueNumber = Double.max(presentWeight + vNext, Double.MIN_VALUE);
             newAddictiveUtilitySpace.setWeight(issue, valueNumber);
             iterNumV++;
 
             //更新一下这个issue下面的value
-            int numValues = issue.getNumberOfValues();
-            for (int j = 0; j < numValues; j++) {
-                ValueDiscrete valueDiscrete = issue.getValue(j);
+            for (ValueDiscrete value : issue.getValues()) {
                 //这里太抽象了，value值在evaluator下面，要通过evaluator的getValue方法获得值，这个值还是个int
                 // 调试看一下是不是int
                 // 貌似解决了 先试用正则化正则 0~1 然后再更新
                 EvaluatorDiscrete presentEvaluatorDiscrete = (EvaluatorDiscrete) present.getEvaluator(issue);
                 EvaluatorDiscrete presentBestEvaluatorDiscrete = (EvaluatorDiscrete) presentBest.getEvaluator(issue);
                 EvaluatorDiscrete BestEvaluatorDiscrete = (EvaluatorDiscrete) best.getEvaluator(issue);
-                presentBestEvaluatorDiscrete.scaleAllValuesFrom0To1();
-                presentBestEvaluatorDiscrete.scaleAllValuesFrom0To1();
-                BestEvaluatorDiscrete.scaleAllValuesFrom0To1();
-                Double presentBestValue = presentBestEvaluatorDiscrete.getDoubleValue(valueDiscrete);
-                Double presentValue = presentEvaluatorDiscrete.getDoubleValue(valueDiscrete);
-                Double bestValue = BestEvaluatorDiscrete.getDoubleValue(valueDiscrete);
+
+                Double presentBestValue = presentBestEvaluatorDiscrete.getDoubleValue(value);
+                Double presentValue = presentEvaluatorDiscrete.getDoubleValue(value);
+                Double bestValue = BestEvaluatorDiscrete.getDoubleValue(value);
 
                 double vNextValue = w * v[iterNumV] +
                         c1 * random.nextDouble() * (presentBestValue - presentValue) +
                         c2 * random.nextDouble() * (bestValue - presentValue);
-                particles[index].v[iterNumV]=vNextValue;
-//                System.out.println("Issue:"+valueDiscrete+"\t"+presentEvaluatorDiscrete.getValue(valueDiscrete));
-                double valueNumber2 = Double.max(presentValue - vNextValue, 0);
-                newAddictiveUtilitySpace.setUtility(issue, valueDiscrete, valueNumber2);
+                particles[index].v[iterNumV] = vNextValue;
+                double valueNumber2 = Double.max(presentValue - vNextValue, Double.MIN_VALUE);
+
+                newAddictiveUtilitySpace.setUtility(issue, value, valueNumber2);
                 iterNumV++;
             }
         }
@@ -92,31 +89,42 @@ public class MyPos {
     }
 
     public void iterParticles() {
-        getBestParticles();
         for (int i = 0; i < particles.length; i++) {
             updateV(i);
         }
-
+        setFitness();
         //全部的更新之后再求一次全局最优
-        getBestParticles();
-        //System.out.printf("这轮建模完事了：" + "最好的结果是:" + gBest.f + "\n");
+        System.out.println("这轮建模完事了：" + "最好的结果是:" + gBest.f + "\n");
     }
 
     public void iterMultipleTimes(int maximum) {
         for (int i = 0; i < maximum; i++) {
+            double a = particles[0].abstractUtilitySpaces.getUtility(BestBidList.get(55));
+            for (Bid b : BestBidList) {
+                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
+            }
+            System.out.println();
             iterParticles();
+            for (Bid b : BestBidList) {
+                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
+            }
+            System.out.println();
         }
     }
 
     //获得全局最优
     private void getBestParticles() {
-        double maxf = Double.MIN_VALUE;
+        double maxf = gBest.f;
         for (Particle p : particles) {
-            if (p.f > maxf) {
-                gBest = p;
+            if (p.f < maxf) {
+                updateBest(p);
                 maxf = p.f;
             }
         }
+    }
+
+    private void updateBest(Particle p) {
+        gBest = p;
     }
 
     void initParticles(UserModel userModel) {
@@ -141,11 +149,14 @@ public class MyPos {
 
             p.f = changeErrorToFitness(errorPow);
         }
+
         for (int i = 0; i < particles.length; i++) {
             if (particles[i].f > bestParticles[i].f) {
                 bestParticles[i] = particles[i];
             }
         }
+
+        getBestParticles();
     }
 
     private double changeErrorToFitness(double error) {
@@ -191,31 +202,28 @@ public class MyPos {
 
 
 class Particle {
-    public AbstractUtilitySpace abstractUtilitySpaces;
+    public AdditiveUtilitySpace abstractUtilitySpaces;
     public Domain domain;
     public double f; //fitness value
     public double[] v; //速度
     public int size;
-    public double vmax ;
+    public double vmax = 1.0;
 
     public Particle(Domain domain) {
         size = 0;
         f = 0;
         this.domain = domain;
-
         abstractUtilitySpaces = getRandomChromosome();
         v = new double[size];
-        initializeArrayV();
         this.vmax = 1.0f;
+        initializeArrayV();
     }
 
     //产生一个随机的效用空间
-    private AbstractUtilitySpace getRandomChromosome() {
+    private AdditiveUtilitySpace getRandomChromosome() {
         Random random = new Random();
         AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(domain);  //直接获得当前utilitySpace下的domain.
         List<Issue> issues = additiveUtilitySpaceFactory.getDomain().getIssues();
-
-
         size += issues.size();
         for (Issue issue : issues) {
             additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble());    //设置每个issue的权重
@@ -235,9 +243,8 @@ class Particle {
     }
 
     private void initializeArrayV() {
-        Random random = new Random();
         for (int i = 0; i < v.length; i++) {
-            v[i] = 0 + (vmax - 0) * random.nextDouble();
+            v[i] = 0f + (vmax - 0f) * Math.random();
         }
     }
 }

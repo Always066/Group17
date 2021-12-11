@@ -6,10 +6,8 @@ import genius.core.issue.IssueDiscrete;
 import genius.core.issue.ValueDiscrete;
 import genius.core.uncertainty.AdditiveUtilitySpaceFactory;
 import genius.core.uncertainty.UserModel;
-import genius.core.utility.AbstractUtilitySpace;
 import genius.core.Bid;
 import genius.core.utility.AdditiveUtilitySpace;
-import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
 import java.util.*;
@@ -23,22 +21,35 @@ public class MyPos {
 
     Particle globalBest; // global maximization
     double vMax; // maximised value
-    int c1, c2; // 个体最优的学习参数和全局最优的学习参数
+    Double c1, c2; // 个体最优的学习参数和全局最优的学习参数
     List<Bid> BestBidList; //原始的bid list Ranking
     Random random;
     private double maxf = Double.MAX_VALUE;
 
     public MyPos(int n, UserModel userModel) {
         this.n = n;
-        c1 = c2 = 2;
+        c1 = c2 = 2d;
         initParticles(userModel);
         BestBidList = userModel.getBidRanking().getBidOrder();
         setFitness();
-        w = 0.5;
+        w = 5;
         random = new Random();
         getBestParticles();
-
+        vMax = 2.0;
     }
+
+    public void iterMultipleTimes(int maximum) {
+        for (int t = 0; t < maximum; t++) {
+            setFitness();
+            for (int i = 0; i < particles.length; i++) {
+                updateV(i);
+            }
+            getBestParticles();
+            //全部的更新之后再求一次全局最优
+            System.out.println("这轮建模完事了：" + "最好的结果是:" + globalBest.f + "\n");
+        }
+    }
+
 
     //计算两个utitlityspace的差
     private void updateV(int index) {
@@ -59,6 +70,10 @@ public class MyPos {
             double vNext = w * v[iterNumV] +
                     c1 * random.nextDouble() * (presentBestWeight - presentWeight)
                     + c2 * random.nextDouble() * (bestWeight - presentWeight);
+            if (vNext > vMax)
+                vNext = vMax;
+            else if (vNext < -vMax)
+                vNext = -vMax;
             particles[index].v[iterNumV] = vNext;
             double valueNumber = Double.max(presentWeight + vNext, Double.MIN_VALUE);
             valueNumber = Double.min(valueNumber, 1);
@@ -81,6 +96,10 @@ public class MyPos {
                 double vNextValue = w * v[iterNumV] +
                         c1 * random.nextDouble() * (presentBestValue - presentValue) +
                         c2 * random.nextDouble() * (bestValue - presentValue);
+                if (vNextValue > vMax)
+                    vNextValue = vMax;
+                else if (vNextValue < -vMax)
+                    vNextValue = -vMax;
                 particles[index].v[iterNumV] = vNextValue;
                 double valueNumber2 = Double.max(presentValue - vNextValue, Double.MIN_VALUE);
 
@@ -91,34 +110,8 @@ public class MyPos {
         particles[index].abstractUtilitySpaces = newAddictiveUtilitySpace.getUtilitySpace();
     }
 
-    public void iterParticles() {
-        setFitness();
-        for (int i = 0; i < particles.length; i++) {
-            updateV(i);
-        }
-        getBestParticles();
-        //全部的更新之后再求一次全局最优
-        System.out.println("这轮建模完事了：" + "最好的结果是:" + globalBest.f + "\n");
-    }
 
-    public void iterMultipleTimes(int maximum) {
-        for (int i = 0; i < maximum; i++) {
-
-//            for (Bid b : BestBidList) {
-//                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
-//            }
-//            System.out.println();
-
-            iterParticles();
-
-//            for (Bid b : BestBidList) {
-//                System.out.printf(String.valueOf(particles[0].abstractUtilitySpaces.getUtility(b)) + " ");
-//            }
-//            System.out.println();
-        }
-    }
-
-    //获得全局最优
+    //获得全局最优 acquire the global optimization
     private void getBestParticles() {
         for (Particle p : particles) {
             if (p.f < maxf) {
@@ -128,16 +121,18 @@ public class MyPos {
         }
     }
 
+    // initialize particles array and best Particles array
     void initParticles(UserModel userModel) {
         particles = new Particle[n];
         bestParticles = new Particle[n];
 
         for (int i = 0; i < n; i++) {
             particles[i] = new Particle(userModel.getDomain());
-            bestParticles[i] = particles[i];
+            bestParticles[i] = particles[i].clone();  // add the deep copy function, it is safer
         }
     }
 
+    // compute the loss value for all particles
     void setFitness() {
         List<Integer> BIdRankingLableOfParticle;
         for (Particle p : particles) {
@@ -147,23 +142,20 @@ public class MyPos {
                 int error = (BIdRankingLableOfParticle.get(i) - i);
                 errorPow += error * error;
             }
-
             p.f = changeErrorToFitness(errorPow);
         }
-
+        //Update individual's best performance
         for (int i = 0; i < particles.length; i++) {
             if (particles[i].f < bestParticles[i].f) {
-                bestParticles[i] = particles[i];
+                bestParticles[i] = particles[i].clone();
             }
         }
     }
 
+    // use thinks of log to optimize the search speed
     private double changeErrorToFitness(double error) {
-        double score = 0;
         double x = error / (Math.pow(BestBidList.size(), 3));
-        double theta = -15 * Math.log(x + 0.00001f);  //利用对数思想   -15
-        score = theta;
-        return score;
+        return -15 * Math.log(x + 0.00001f);
     }
 
     private List<Integer> getParticleBidList(Particle p) {
@@ -181,25 +173,25 @@ public class MyPos {
         // map转换成list进行排序
         List<Map.Entry<Integer, Double>> listRank = new ArrayList<>(utilityRank.entrySet());
         // 排序
-        Collections.sort(listRank, valueComparator);
+        listRank.sort(valueComparator);
         //用以上的方法，TreeMap此时就被转换成了List。这tm什么方法我也很烦躁。。
         //list现在长这个样子。[100=0.3328030236029489, 144=0.33843867914476017, 82=0.35366230775310603, 68=0.39994535024458255, 25=0.4407324473062739, 119=0.45895568095691974,
         //不过这也有个好处。就是列表的索引值，可以表示为utilityList的索引值。
         List<Integer> bidRankingLabel = new ArrayList<Integer>();
-        for (int i = 0, size = listRank.size(); i < size; i++) {
-            bidRankingLabel.add(listRank.get(i).getKey());
+        for (Map.Entry<Integer, Double> integerDoubleEntry : listRank) {
+            bidRankingLabel.add(integerDoubleEntry.getKey());
         }
         return bidRankingLabel;
         //返回一个list, list里面的item是一个Map,表示这个位置的bid在我们预测的序列中第几排名
     }
-//    public void fitnessFunction(){
-//        for (int i=0;i<n;++i){
-//            particles[i].f=0;
-//        }
-//    }
 }
 
 
+/*
+ * class Particles:
+ * The smallest component to behalf the action,
+ * The essence of POS is to stimulate the behaves of particles.
+ **/
 class Particle implements Cloneable {
     public AdditiveUtilitySpace abstractUtilitySpaces;
     public Domain domain;

@@ -29,7 +29,9 @@ import genius.core.utility.UtilitySpace;
 public class Agent17 extends AbstractNegotiationParty {
     private static double rankThreshold;
     private double MINIMUM_TARGET = 0.7;
+    private int round = 0;
     private Bid lastOffer;
+    private MyJonnyBlack songJonnyBlack;
     private JhonnyBlackModel jhonnyBlackModel;
     NegotiationInfo info;
     IaMap iaMap;
@@ -45,6 +47,7 @@ public class Agent17 extends AbstractNegotiationParty {
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
         UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),userModel);
         jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
+        songJonnyBlack = new MyJonnyBlack(utilitySpace);
         rankThreshold = 0;
         Describe();
         iaMap = new IaMap(userModel);
@@ -101,8 +104,6 @@ public class Agent17 extends AbstractNegotiationParty {
      * Check if the rank of offer is above the threshold.
      * Elicit the offer if needed
      *
-
-
      */
     private boolean isRankAboveThreshold(Bid bid) {
         // Check if bid is in current ranking
@@ -193,10 +194,10 @@ public class Agent17 extends AbstractNegotiationParty {
             double o1 = jhonnyBlackModel.valuation_opponent(lastOffer);
             double o2 = iaMap.JBpredict(lastOffer);
             double o3 = getUtilitySpace().getUtility(lastOffer);
-            System.out.println("收到报价阶段，我实现的JB" + o1 + ", 学长实现的JB：" + o2 + ",目前我的模型的utility: " + o3);
-
+            double o4 = songJonnyBlack.calculateJonnyBlack(lastOffer);
+            System.out.println("第"+round+"局："+"收到报价阶段，我实现的JB" + o1 + ", 学长实现的JB：" + o2 + ", song实现的JB:" + o4 +",目前我的模型的utility: " + o3);
         }
-
+        round++;
     }
 
     @Override
@@ -228,5 +229,3 @@ public class Agent17 extends AbstractNegotiationParty {
         }
     }
 }
-
-

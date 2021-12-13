@@ -31,6 +31,7 @@ public class Agent17 extends AbstractNegotiationParty {
     private double MINIMUM_TARGET = 0.7;
     private int round = 0;
     private Bid lastOffer;
+    private GeneticAlgorithm geneticAlgorithm;
     private MyJonnyBlack songJonnyBlack;
     private JhonnyBlackModel jhonnyBlackModel;
     NegotiationInfo info;
@@ -46,6 +47,9 @@ public class Agent17 extends AbstractNegotiationParty {
         this.info = info;
         System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
         UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),userModel);
+        System.out.println("--------已知--------");
+        System.out.println(utilitySpace);
+        geneticAlgorithm = new GeneticAlgorithm(userModel);
         jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
         songJonnyBlack = new MyJonnyBlack(utilitySpace);
         rankThreshold = 0;

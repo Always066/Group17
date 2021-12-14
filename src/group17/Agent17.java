@@ -37,6 +37,7 @@ public class Agent17 extends AbstractNegotiationParty {
     NegotiationInfo info;
     IaMap iaMap;
     MyPos pos;
+    AdditiveUtilitySpace additiveUtilitySpace;
 
     /**
      * Initializes a new instance of the agent.
@@ -49,7 +50,7 @@ public class Agent17 extends AbstractNegotiationParty {
         UserUtilitySpace utilitySpace = new UserUtilitySpace((AdditiveUtilitySpace) info.getUtilitySpace(),userModel);
         System.out.println("--------已知--------");
         System.out.println(utilitySpace);
-        geneticAlgorithm = new GeneticAlgorithm(userModel);
+//        geneticAlgorithm = new GeneticAlgorithm(userModel);
         jhonnyBlackModel = new JhonnyBlackModel(utilitySpace);
         songJonnyBlack = new MyJonnyBlack(utilitySpace);
         rankThreshold = 0;
@@ -59,6 +60,8 @@ public class Agent17 extends AbstractNegotiationParty {
         double[][] b = utilitySpace.getOption_value();
         pos = new MyPos(5000,userModel);
         pos.iterMultipleTimes(10);
+        additiveUtilitySpace=pos.get();
+//        additiveUtilitySpace = (AdditiveUtilitySpace)geneticAlgorithm.mainFunction();
     }
 
 
@@ -152,11 +155,11 @@ public class Agent17 extends AbstractNegotiationParty {
         System.out.println("Random rank = " + randRank);
         double max_utility = 0;
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-        for (int i = 0; i < thresholdRanks; i++) {
+        for (int i = 0; i < rankThreshold*10; i++) {
             Bid bid = bidRanking.getBidOrder().get(noRanks - i - 1);
             double o1 = jhonnyBlackModel.valuation_opponent(bid); //JhonnyBlack 建模得到的utility
-            double o3 = getUtility(bid); //user获得的utility
-            if (o1 > max_utility) {
+            double o3 = additiveUtilitySpace.getUtility(bid); //user获得的utility
+            if (o1*o3 > max_utility) {
                 output = bid;
                 max_utility = o1;
             }

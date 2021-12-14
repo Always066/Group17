@@ -24,18 +24,22 @@ public class MyPos {
     Double c1, c2; // 个体最优的学习参数和全局最优的学习参数
     List<Bid> BestBidList; //原始的bid list Ranking
     Random random;
-    private double maxf = Double.MAX_VALUE;
+    private double maxf = Double.MIN_VALUE;
 
     public MyPos(int n, UserModel userModel) {
         this.n = n;
-        c1 = c2 = 2d;
+        c1 = c2 = 3d;
         initParticles(userModel);
         BestBidList = userModel.getBidRanking().getBidOrder();
         setFitness();
         w = 5;
         random = new Random();
         getBestParticles();
-        vMax = 2.0;
+        vMax = 1.0;
+    }
+
+    public AdditiveUtilitySpace get(){
+        return globalBest.abstractUtilitySpaces;
     }
 
     public void iterMultipleTimes(int maximum) {
@@ -114,7 +118,7 @@ public class MyPos {
     //获得全局最优 acquire the global optimization
     private void getBestParticles() {
         for (Particle p : particles) {
-            if (p.f < maxf) {
+            if (p.f > maxf) {
                 globalBest = p.clone();
                 maxf = p.f;
             }
@@ -146,7 +150,7 @@ public class MyPos {
         }
         //Update individual's best performance
         for (int i = 0; i < particles.length; i++) {
-            if (particles[i].f < bestParticles[i].f) {
+            if (particles[i].f > bestParticles[i].f) {
                 bestParticles[i] = particles[i].clone();
             }
         }

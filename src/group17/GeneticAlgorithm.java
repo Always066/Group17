@@ -78,8 +78,8 @@ public class GeneticAlgorithm {
                 sumError += loss;
                 lossList.add(loss);
             }
-
-            System.out.println(i+" average error score: "+ sumError / populationList.size());
+            if (i%40==0)
+                System.out.println(i+" average error score: "+ sumError / populationList.size());
 
             selectedPopulation = chooseGoodPopulation(lossList);
 

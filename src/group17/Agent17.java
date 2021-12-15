@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.*;
 
+import agents.anac.y2013.MetaAgent.portfolio.thenegotiatorreloaded.BidDetails;
+import agents.anac.y2013.MetaAgent.portfolio.thenegotiatorreloaded.OutcomeSpace;
+import agents.anac.y2013.MetaAgent.portfolio.thenegotiatorreloaded.SortedOutcomeSpace;
 import genius.core.AgentID;
 import genius.core.Bid;
 import genius.core.actions.Accept;
@@ -32,7 +35,7 @@ public class Agent17 extends AbstractNegotiationParty {
     private MyJonnyBlack songJonnyBlack;
     NegotiationInfo info;
     double whenBegin;
-    MyPos pos;
+    SortedOutcomeSpace outcomeSpace;
 
     /**
      * Initializes a new instance of the agent.
@@ -47,18 +50,15 @@ public class Agent17 extends AbstractNegotiationParty {
         songJonnyBlack = new MyJonnyBlack(utilitySpace);
         rankThreshold = 0;
 //        Describe();
-        pos = new MyPos(1000, userModel);
-        pos.iterMultipleTimes(20);
-        AdditiveUtilitySpace add = pos.get();
 
-//        utilitySpace = (AdditiveUtilitySpace) geneticAlgorithm.mainFunction();
-        utilitySpace = add;
+        utilitySpace = (AdditiveUtilitySpace) geneticAlgorithm.mainFunction();
         System.out.println(utilitySpace);
-//        System.out.println("----------POSAlgorithm------------");
+        System.out.println("----------POSAlgorithm------------");
 //        System.out.println(add);
 
         whenBegin = 0.5; //0.5的时间以前都不接受
-        showTop5();
+//        showTop5();
+        outcomeSpace = new SortedOutcomeSpace((AdditiveUtilitySpace) utilitySpace);
     }
 
 
@@ -70,6 +70,7 @@ public class Agent17 extends AbstractNegotiationParty {
     @Override
     public Action chooseAction(List<Class<? extends Action>> possibleActions) {
         // Check for acceptance if we have received an offer
+        manageMiniTarget();
         if (lastOffer != null) {
             rankThreshold = Math.pow(timeline.getTime(), 4);
             rankThreshold = Math.min(rankThreshold, 0.3);
@@ -102,15 +103,15 @@ public class Agent17 extends AbstractNegotiationParty {
         System.out.println();
     }
 
-    void manageTime() {
+    private void manageMiniTarget() {
         if (timeline.getTime() <= 0.5) {
-            rankThreshold = 0.05;
-        }
-        if (timeline.getTime() > 0.5 && timeline.getTime() < 0.75) {
-            rankThreshold = 0.15;
-        }
-        if (timeline.getTime() > 0.5 && timeline.getTime() < 0.95) {
-            rankThreshold = 0.25;
+            MINIMUM_TARGET = 0.85;
+        } else if (timeline.getTime() > 0.5 && timeline.getTime() < 0.65) {
+            MINIMUM_TARGET = 0.75;
+        } else if (timeline.getTime() > 0.65 && timeline.getTime() <= 0.95) {
+            MINIMUM_TARGET = 0.65;
+        } else if (timeline.getTime() > 0.95) {
+            MINIMUM_TARGET = 0.5;
         }
     }
 
@@ -126,9 +127,6 @@ public class Agent17 extends AbstractNegotiationParty {
             // Elicit the bid rank from the user
             userModel = user.elicitRank(bid, userModel);
             bidRanking = userModel.getBidRanking();
-            pos = new MyPos(1000, userModel);
-            pos.iterMultipleTimes(20);
-            utilitySpace = pos.get();
         }
         int noRanks = bidRanking.getSize();
         System.out.println("总的报价列表有这么长:" + noRanks);
@@ -139,6 +137,8 @@ public class Agent17 extends AbstractNegotiationParty {
         System.out.println("Within threshold? " + result);
 
         if (timeline.getTime() < whenBegin)
+            result = false;
+        if (1 - utilitySpace.getUtility(bid) < MINIMUM_TARGET)
             result = false;
         return result;
     }
@@ -151,25 +151,26 @@ public class Agent17 extends AbstractNegotiationParty {
         int thresholdRanks = (int) (noRanks * rankThreshold);
         Random rand = new Random();
         int randRank = rand.nextInt(thresholdRanks + 1);
-        System.out.println("Random rank = " + randRank);
         double max_utility = 0;
         Bid output = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-
-        Bid outSocial = bidRanking.getBidOrder().get(noRanks - randRank - 1);
-        for (int i = 0; i < thresholdRanks + 1; i++) {
-            Bid bid = bidRanking.getBidOrder().get(noRanks - 1 - i);
-            double o1 = songJonnyBlack.calculateJonnyBlack(bid); //JhonnyBlack 建模得到的utility
-            double o3 = utilitySpace.getUtility(bid); //user获得的utility
-            if (o1 * o3 > max_utility) {
-                outSocial = bid;
-                max_utility = o1 * o3;
+        List<BidDetails> list = new OutcomeSpace((AdditiveUtilitySpace) utilitySpace).getAllOutcomes();
+        Collections.shuffle(list);
+        list = list.subList(0, 2000);
+        for (BidDetails b : list) {
+            Bid bid = b.getBid();
+            if (1 - utilitySpace.getUtility(bid) > MINIMUM_TARGET) {
+                double o1 = songJonnyBlack.calculateJonnyBlack(bid); //JhonnyBlack 建模得到的utility
+                double o3 = 1 - utilitySpace.getUtility(bid); //user获得的utility
+                if (o1 * o3 > max_utility) {
+                    output = bid;
+                    max_utility = o1 * o3;
+                }
             }
         }
-        if (rand.nextDouble() > 0) {
-            System.out.println("这次信一把我们的建模数据");
-            output = outSocial;
-        }
-        System.out.println("我们给出报价，第" + round + "局，我们的效用值:" + utilitySpace.getUtility(output) + ",对手的效用值:" + songJonnyBlack.calculateJonnyBlack(output));
+        Bid outputSocial = bidRanking.getBidOrder().get(noRanks - randRank - 1);
+        if (utilitySpace.getUtility(output) < 1 - MINIMUM_TARGET)
+            outcomeSpace.getBidNearUtility(1 - MINIMUM_TARGET);
+        System.out.println("我们给出报价，第" + round + "局，我们的效用值:" + (1 - utilitySpace.getUtility(output)) + ",对手的效用值:" + songJonnyBlack.calculateJonnyBlack(output));
         System.out.println("------------------------我们开始下一轮了-----------------------------");
         return output;
     }
@@ -238,15 +239,11 @@ public class Agent17 extends AbstractNegotiationParty {
         }
     }
 
-//    private void tryMoreBids() {
-//        if (userModel.getBidRanking().getSize() < 3000) {
-//            OutcomeSpace outcomeSpace = new OutcomeSpace(utilitySpace);
-//            List<BidDetails> totalOutcomes = outcomeSpace.getAllOutcomes();
-//            Collections.shuffle(totalOutcomes);
-//            int size = userModel.getBidRanking().getSize();
-//            for (int i = 0; i < 3000 - size; i++) {
-//                userModel = user.elicitRank(totalOutcomes.get(i).getBid(), userModel);
-//            }
-//        }
-//    }
+    private List<BidDetails> allBids() {
+
+        OutcomeSpace outcomeSpace = new OutcomeSpace((AdditiveUtilitySpace) utilitySpace);
+        List<BidDetails> totalOutcomes = outcomeSpace.getAllOutcomes();
+        Collections.shuffle(totalOutcomes);
+        return totalOutcomes;
+    }
 }

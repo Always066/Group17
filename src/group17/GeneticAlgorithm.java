@@ -13,17 +13,16 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int population = 200;
-    private final int maxIteration = 1000;
-    private final double rateOfMutation = 0.08;
-    private final int numSelectedBids = 150;
+    private final int population = 500;
+    private final int maxIteration = 20;
+    private final double rateOfMutation = 0.04;
+    private final int numSelectedBids = 250;
 
     private final UserModel userModel;
     private final List<AbstractUtilitySpace> populationList = new ArrayList<>();
 
     public GeneticAlgorithm(UserModel userModel) {
         this.userModel = userModel;
-        System.out.println("best unit is: "+mainFunction());
     }
 
     public AbstractUtilitySpace mainFunction() {
@@ -42,7 +41,7 @@ public class GeneticAlgorithm {
         double deletedNumber = -12345.6;
 
         for (int i=0; i < (population / 4); i++) {
-            if (i > (population / 4) -3) {
+            if (i > (population / 4) -5) {
                 while (true) {
                     int randomNumber = random.nextInt(population-1);
                     if (copyLossList.get(randomNumber) != deletedNumber) {
@@ -81,7 +80,7 @@ public class GeneticAlgorithm {
                 scoreList.add(calculateUtilityScore(selectedPopulation.get(n)));
             }
 
-            for (int j=0; j < selectedPopulation.size() / 2; j++) {
+            for (int j=0; j < selectedPopulation.size() / 1; j++) {
                 while (true) {
                     int randomFatherNumber = random.nextInt(selectedPopulation.size() - 1);
                     int randomMotherNumber = random.nextInt(selectedPopulation.size() - 1);

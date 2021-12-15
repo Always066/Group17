@@ -4,7 +4,9 @@
     <root id="archive" name="group17.jar">
       <element id="directory" name="group17">
         <element id="dir-copy" path="$PROJECT_DIR$/src/group17" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/PSO" />
         <element id="dir-copy" path="$PROJECT_DIR$/out/production/Group17/group17" />
+        <element id="dir-copy" path="$PROJECT_DIR$/out/production/Group17/PSO" />
       </element>
     </root>
   </artifact>

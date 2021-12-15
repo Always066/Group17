@@ -59,17 +59,17 @@ highest cost." value="Catering">
 <item evaluation="2.0" index="4" description="Hire somebody else to do your dirty work. No work,but pricey." value="Hired Help"> 
 </item> 
 </issue> 
-<weight index="1" value="0.09518893313062468"> 
+<weight index="1" value="0.09518908075124076"> 
 </weight> 
-<weight index="2" value="0.22832187195954876"> 
+<weight index="2" value="0.22832202643947966"> 
 </weight> 
-<weight index="3" value="0.10913991502419408"> 
+<weight index="3" value="0.1091397909505543"> 
 </weight> 
-<weight index="4" value="0.2141902232676177"> 
+<weight index="4" value="0.2141899633686166"> 
 </weight> 
-<weight index="5" value="0.10807181177822138"> 
+<weight index="5" value="0.1080718196313665"> 
 </weight> 
-<weight index="6" value="0.2450872448397935"> 
+<weight index="6" value="0.24508731885874216"> 
 </weight> 
 </objective> 
 <discount_factor value="1.0"> 

@@ -1,4 +1,4 @@
-package PSO;
+package group17;
 
 import genius.core.Domain;
 import genius.core.issue.Issue;
@@ -28,17 +28,18 @@ public class MyPos {
 
     public MyPos(int n, UserModel userModel) {
         this.n = n;
-        c1 = c2 = 3d;
+        c1 = c2 = 0.5d;
         initParticles(userModel);
         BestBidList = userModel.getBidRanking().getBidOrder();
         setFitness();
-        w = 5;
+        w = 1.5;
         random = new Random();
         getBestParticles();
-        vMax = 1.0;
+        vMax = 0.05;
     }
 
-    public AdditiveUtilitySpace get(){
+    public AdditiveUtilitySpace get() {
+        globalBest.abstractUtilitySpaces.normalizeWeights();
         return globalBest.abstractUtilitySpaces;
     }
 
@@ -50,7 +51,6 @@ public class MyPos {
             }
             getBestParticles();
             //全部的更新之后再求一次全局最优
-            System.out.println("这轮建模完事了：" + "最好的结果是:" + globalBest.f + "\n");
         }
     }
 
@@ -61,7 +61,6 @@ public class MyPos {
         AdditiveUtilitySpace present = (AdditiveUtilitySpace) particles[index].abstractUtilitySpaces;
         AdditiveUtilitySpace presentBest = (AdditiveUtilitySpace) bestParticles[index].abstractUtilitySpaces;
         AdditiveUtilitySpace best = (AdditiveUtilitySpace) globalBest.abstractUtilitySpaces;
-        int issueSIze = particles[index].abstractUtilitySpaces.getDomain().getIssues().size();//有多少个issue
 
         AdditiveUtilitySpaceFactory newAddictiveUtilitySpace = new AdditiveUtilitySpaceFactory(present.getDomain());
         int iterNumV = 0; //吐槽一下这里，v是一个数组所以算位置
@@ -97,9 +96,9 @@ public class MyPos {
                 Double presentValue = presentEvaluatorDiscrete.getDoubleValue(value);
                 Double bestValue = BestEvaluatorDiscrete.getDoubleValue(value);
 
-                double vNextValue = w * v[iterNumV] +
-                        c1 * random.nextDouble() * (presentBestValue - presentValue) +
-                        c2 * random.nextDouble() * (bestValue - presentValue);
+                double vNextValue = 2 * v[iterNumV] +
+                        3 * random.nextDouble() * (presentBestValue - presentValue) +
+                        3 * random.nextDouble() * (bestValue - presentValue);
                 if (vNextValue > vMax)
                     vNextValue = vMax;
                 else if (vNextValue < -vMax)
@@ -111,6 +110,7 @@ public class MyPos {
                 iterNumV++;
             }
         }
+        newAddictiveUtilitySpace.normalizeWeights();
         particles[index].abstractUtilitySpaces = newAddictiveUtilitySpace.getUtilitySpace();
     }
 
@@ -144,9 +144,11 @@ public class MyPos {
             int errorPow = 0;
             for (int i = 0, size = BIdRankingLableOfParticle.size(); i < size; i++) {
                 int error = (BIdRankingLableOfParticle.get(i) - i);
-                errorPow += error * error;
+//                errorPow += (error * error)/Math.pow(BestBidList.size(),2);
+                errorPow += Math.abs(error) / (double) BestBidList.size();
             }
             p.f = changeErrorToFitness(errorPow);
+            p.f = -15d * Math.log(errorPow+ 0.00001f);
         }
         //Update individual's best performance
         for (int i = 0; i < particles.length; i++) {
@@ -158,7 +160,7 @@ public class MyPos {
 
     // use thinks of log to optimize the search speed
     private double changeErrorToFitness(double error) {
-        double x = error / (Math.pow(BestBidList.size(), 3));
+        double x = error / (Math.pow(BestBidList.size(), 1));
         return -15 * Math.log(x + 0.00001f);
     }
 

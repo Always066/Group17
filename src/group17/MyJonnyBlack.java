@@ -4,6 +4,7 @@ import genius.core.Bid;
 import genius.core.issue.Issue;
 import genius.core.issue.IssueDiscrete;
 import genius.core.issue.ValueDiscrete;
+import genius.core.utility.AbstractUtilitySpace;
 import genius.core.utility.AdditiveUtilitySpace;
 
 import java.util.*;
@@ -14,7 +15,7 @@ public class MyJonnyBlack {
     private HashMap<Integer, HashMap<String, Integer>> frequencyTable = new HashMap<>();
     private HashMap<Integer, HashMap<String, Double>> frequencyRateTable = new HashMap<>();
 
-    public MyJonnyBlack(AdditiveUtilitySpace additiveUtilitySpace) {
+    public MyJonnyBlack(AbstractUtilitySpace additiveUtilitySpace) {
         issues = additiveUtilitySpace.getDomain().getIssues();
         createFrequencyTable();
     }

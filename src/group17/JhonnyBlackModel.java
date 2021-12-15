@@ -1,11 +1,13 @@
 package group17;
 
 import genius.core.Bid;
+import genius.core.Domain;
 import genius.core.issue.Issue;
 import genius.core.issue.IssueDiscrete;
 import genius.core.issue.Value;
 import genius.core.issue.ValueDiscrete;
 import genius.core.misc.Pair;
+import genius.core.utility.AbstractUtilitySpace;
 import genius.core.utility.AdditiveUtilitySpace;
 import genius.core.utility.EvaluatorDiscrete;
 
@@ -16,18 +18,18 @@ public class JhonnyBlackModel {
     private double[][] opponent_frequency;
     private double[][] opponent_option_value;
     private double[] opponent_weight;
-    private AdditiveUtilitySpace utilitySpace;
+    private final Domain domain;
     private Map<Pair<Integer, Value>, Integer> optionCountMap;
     List<Issue> issues;
 
 
-    public JhonnyBlackModel(AdditiveUtilitySpace additiveUtilitySpace) {
-        this.utilitySpace = additiveUtilitySpace;
+    public JhonnyBlackModel(Domain domain) {
+        this.domain = domain;
         init();
     }
 
     private void init() {
-        issues = utilitySpace.getDomain().getIssues();
+        issues = domain.getIssues();
         int value_number = ((IssueDiscrete) issues.get(0)).getValues().size();
         opponent_frequency = new double[issues.size()][value_number];
         opponent_option_value = new double[issues.size()][value_number];

@@ -219,14 +219,14 @@ public class GeneticAlgorithm {
         });
 
         for (int i =0; i < mapList.size(); i++) {
-            int distance = Math.abs(mapList.get(i).getKey() - i);
+            int distance = mapList.get(i).getKey() - i;
             totalLoss += Math.pow(distance, 2);
         }
 
         double x= totalLoss / (Math.pow(mapList.size(), 3));
 
         //total distance 越小， return数越大
-        return -15 * Math.log(x + 0.000001f);
+        return -10 * Math.log(x + 0.00001f);
     }
 
     private void InitPopulation() {

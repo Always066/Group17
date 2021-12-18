@@ -5,7 +5,7 @@
 在代码测试和性能调优方面工作欠缺
 
 # 报告需要重视起来
-<img alt="img.png" height="500" src="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/src/img.png" width="500"/>
+<img alt="img.png" height="500" src="./img.png" width="500"/>
 
 这是基本的评分标准，我总结一下就是：
 

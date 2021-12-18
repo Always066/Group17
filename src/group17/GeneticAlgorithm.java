@@ -13,10 +13,14 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int population = 2000;
+    private final int population = 4000;
     private final int maxIteration = 200;
     private final double rateOfMutation = 0.001;
     private final int numSelectedBids = 150;
+    int tolerant = 20;
+    int reformNumber = 5;
+    boolean switchTolerant = true;
+
 
     private final UserModel userModel;
     private List<AbstractUtilitySpace> populationList = new ArrayList<>();
@@ -30,32 +34,34 @@ public class GeneticAlgorithm {
         InitPopulation();       //创建population个 个体
         AbstractUtilitySpace bestUnit = startIteration();       //获得每个utility space的损失
 
-        System.out.println("best unit is: "+bestUnit);
+        System.out.println("best unit is: " + bestUnit);
         return bestUnit;
     }
 
     private List<AbstractUtilitySpace> chooseGoodPopulation(List<Double> lossList) {
         List<AbstractUtilitySpace> chosenPopulation = new ArrayList<>();
         List<Double> copyLossList = new ArrayList<>(lossList);
+        List<Double> orderedList = new ArrayList<>(copyLossList);
+        Collections.sort(orderedList);
+        Collections.reverse(orderedList);
+        int chosenNumber = 250; //选择多少种群
 
         Random random = new Random();
         double deletedNumber = -12345.6;
 
-        for (int i=0; i < 500; i++) {
-            if (i > (500 / 4) - 10) {
+        for (int i = 0; i < chosenNumber; i++) {
+            int index = copyLossList.indexOf(orderedList.get(i));
+            if (i > chosenNumber / 4) {
                 while (true) {
-                    int randomNumber = random.nextInt((populationList.size())-1);
+                    int randomNumber = random.nextInt((populationList.size()) - i - 1) + i;
                     if (copyLossList.get(randomNumber) != deletedNumber) {
                         chosenPopulation.add(populationList.get(randomNumber));
                         break;
                     }
                 }
+            } else {
 
-            }else {
-                double maxUtility = Collections.max(copyLossList);
-                int maxIndex = copyLossList.indexOf(maxUtility);
-                chosenPopulation.add(populationList.get(maxIndex));
-                copyLossList.set(maxIndex, deletedNumber);
+                chosenPopulation.add(populationList.get(index));
             }
         }
 
@@ -65,36 +71,79 @@ public class GeneticAlgorithm {
     private AbstractUtilitySpace startIteration() {
         Random random = new Random();
         List<Double> finalScoreList = new ArrayList<>();
+        double GeneuisFactor = 0.1;
+        double pastBestScore = 0;
+        int toleratedTimes = 0;
+        int reformedTimes = 0;
+        AbstractUtilitySpace BEST = populationList.get(0);
 
-        for (int i=0; i < maxIteration; i++) {
+        for (int i = 0; i < maxIteration; i++) {
             double sumError = 0;
             List<Double> scoreList = new ArrayList<>();
             List<AbstractUtilitySpace> totalFinalPopulation = new ArrayList<>();
 
             List<AbstractUtilitySpace> selectedPopulation;
             List<Double> lossList = new ArrayList<>();
-            for (int p=0; p < populationList.size(); p++) {
+            for (int p = 0; p < populationList.size(); p++) {
                 double loss = calculateUtilityScore(populationList.get(p));
                 sumError += loss;
                 lossList.add(loss);
             }
-            if (i%40==0)
-                System.out.println(i+" average error score: "+ sumError / populationList.size());
+            GeneuisFactor = 0.1;
+            if (switchTolerant) {
+                if ((sumError / populationList.size()) - pastBestScore < 3) {
+                    toleratedTimes++;
+                    if (toleratedTimes > tolerant) {
+                        if (reformedTimes < reformNumber) {
+                            GeneuisFactor = 0.5;
+                            reformedTimes++;
+                            toleratedTimes = 0;
+                            System.out.println("开始变革");
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            pastBestScore = sumError / populationList.size();
+            if (i % 10 == 0)
+                System.out.println(i + " average error score: " + sumError / populationList.size());
 
             selectedPopulation = chooseGoodPopulation(lossList);
 
-            for (int n=0; n < selectedPopulation.size(); n++) {
-                totalFinalPopulation.add(selectedPopulation.get(n));
-                scoreList.add(calculateUtilityScore(selectedPopulation.get(n)));
+            for (AbstractUtilitySpace abstractUtilitySpace : selectedPopulation) {
+                totalFinalPopulation.add(abstractUtilitySpace);
+                scoreList.add(calculateUtilityScore(abstractUtilitySpace));
             }
 
-            for (int j=0; j < selectedPopulation.size() / 2; j++) {
+            //分数排序
+            List<Double> orderedScore = new ArrayList<>(scoreList);
+            Collections.sort(orderedScore);
+            Collections.reverse(orderedScore);
+
+
+            for (int j = 0; j < selectedPopulation.size() / 4; j++) {
                 while (true) {
-                    int randomFatherNumber = random.nextInt(selectedPopulation.size() - 1);
-                    int randomMotherNumber = random.nextInt(selectedPopulation.size() - 1);
-                    if (randomFatherNumber != randomMotherNumber) {
-                        AdditiveUtilitySpace father = (AdditiveUtilitySpace) selectedPopulation.get(randomFatherNumber);
-                        AdditiveUtilitySpace mother = (AdditiveUtilitySpace) selectedPopulation.get(randomMotherNumber);
+                    int FatherIndex;
+                    int MotherIndex;
+                    // 90%的概率他们的父母都是最优秀的
+                    if (new Random().nextDouble() > GeneuisFactor) {
+                        List<Double> goodParents = orderedScore.subList(0, orderedScore.size() / 5);
+                        int FatherNumber = new Random().nextInt(goodParents.size() - 1);
+                        Double FatherScore = goodParents.get(FatherNumber);
+                        FatherIndex = scoreList.indexOf(FatherScore);
+
+                        int MotherNumber = new Random().nextInt(goodParents.size() - 1);
+                        Double MotherScore = goodParents.get(MotherNumber);
+                        MotherIndex = scoreList.indexOf(MotherScore);
+                    } else {
+                        FatherIndex = random.nextInt(selectedPopulation.size() - 1);
+                        MotherIndex = random.nextInt(selectedPopulation.size() - 1);
+                    }
+                    if (FatherIndex != MotherIndex) {
+                        AdditiveUtilitySpace father = (AdditiveUtilitySpace) selectedPopulation.get(FatherIndex);
+                        AdditiveUtilitySpace mother = (AdditiveUtilitySpace) selectedPopulation.get(MotherIndex);
                         AbstractUtilitySpace son = crossover(father, mother);
                         totalFinalPopulation.add(son);
                         scoreList.add(calculateUtilityScore(son));
@@ -104,54 +153,65 @@ public class GeneticAlgorithm {
             }
             finalScoreList = scoreList;
             populationList = totalFinalPopulation;
-        }
-        double bestScore = Collections.max(finalScoreList);
-        int index = finalScoreList.indexOf(bestScore);
+            double bestScore = Collections.max(finalScoreList);
+            int index = finalScoreList.indexOf(bestScore);
 
-        return populationList.get(index);
+            if (calculateUtilityScore(populationList.get(index)) > calculateUtilityScore(BEST)) {
+                BEST = populationList.get(index);
+            }
+        }
+
+        return BEST;
+    }
+
+    private List<AdditiveUtilitySpace> getNiceParent(List<AbstractUtilitySpace> totalFinalPopulation, List<Double> scoreList) {
+        List<AdditiveUtilitySpace> outputList = new ArrayList<>();
+
+
+        return outputList;
     }
 
     private AbstractUtilitySpace crossover(AdditiveUtilitySpace father, AdditiveUtilitySpace mother) {
         Random random = new Random();
 
-        double fatherUtility =  calculateUtilityScore(father);
+        double fatherUtility = calculateUtilityScore(father);
         double motherUtility = calculateUtilityScore(mother);
 
         AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(userModel.getDomain());
         List<IssueDiscrete> issues = additiveUtilitySpaceFactory.getIssues();
 
-        for (IssueDiscrete issue: issues) {
+        for (IssueDiscrete issue : issues) {
             double randomIssueNumber = random.nextDouble();
             if (fatherUtility >= motherUtility) {
                 if (randomIssueNumber <= 0.65) {
                     if (random.nextDouble() <= rateOfMutation) {
                         additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble() + 0.01);
-                    }else {
+                    } else {
                         additiveUtilitySpaceFactory.setWeight(issue, father.getWeight(issue));
                     }
-                }else {
+                } else {
                     if (random.nextDouble() <= rateOfMutation) {
                         additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble() + 0.01);
-                    }else {
+                    } else {
                         additiveUtilitySpaceFactory.setWeight(issue, mother.getWeight(issue));
                     }
                 }
-            }else {
+            } else {
                 if (randomIssueNumber > 0.65) {
                     if (random.nextDouble() <= rateOfMutation) {
                         additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble() + 0.01);
-                    }else {
+                    } else {
                         additiveUtilitySpaceFactory.setWeight(issue, father.getWeight(issue));
                     }
-                }else {
+                } else {
                     if (random.nextDouble() <= rateOfMutation) {
                         additiveUtilitySpaceFactory.setWeight(issue, random.nextDouble() + 0.01);
-                    }else {
+                    } else {
                         additiveUtilitySpaceFactory.setWeight(issue, mother.getWeight(issue));
                     }
                 }
             }
-            for (ValueDiscrete value: issue.getValues()) {
+            for (ValueDiscrete value : issue.getValues()) {
                 double fatherValueWeight = ((EvaluatorDiscrete) father.getEvaluator(issue)).getDoubleValue(value);
                 double motherValueWeight = ((EvaluatorDiscrete) mother.getEvaluator(issue)).getDoubleValue(value);
                 int randomValueNumber = random.nextInt(2);
@@ -159,13 +219,13 @@ public class GeneticAlgorithm {
                     if (randomValueNumber <= 0.65) {
                         if (random.nextDouble() <= rateOfMutation) {
                             additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
-                        }else {
+                        } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, fatherValueWeight);
                         }
-                    }else {
+                    } else {
                         if (random.nextDouble() <= rateOfMutation) {
                             additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
-                        }else {
+                        } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, motherValueWeight);
                         }
                     }
@@ -173,13 +233,13 @@ public class GeneticAlgorithm {
                     if (randomValueNumber > 0.65) {
                         if (random.nextDouble() <= rateOfMutation) {
                             additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
-                        }else {
+                        } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, fatherValueWeight);
                         }
-                    }else {
+                    } else {
                         if (random.nextDouble() <= rateOfMutation) {
                             additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
-                        }else {
+                        } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, motherValueWeight);
                         }
                     }
@@ -199,9 +259,13 @@ public class GeneticAlgorithm {
         HashMap<Integer, Double> selectedUtilityMap = new HashMap<>();
 
         if (bidList.size() > numSelectedBids) {
-            int start = bidList.size() - numSelectedBids;
-            int end = bidList.size();
-            bidList = bidList.subList(0, end);
+            List<Bid> bidListNew = new ArrayList<>();
+            double interval = (double) bidList.size() / (double) numSelectedBids;
+            for (int i = 0; i < numSelectedBids; i++) {
+                int index = (int) Math.round(interval * i);
+                bidListNew.add(bidList.get(index));
+            }
+            bidList = bidListNew;
         }
 
         int order = 0;
@@ -218,19 +282,19 @@ public class GeneticAlgorithm {
             }
         });
 
-        for (int i =0; i < mapList.size(); i++) {
+        for (int i = 0; i < mapList.size(); i++) {
             int distance = mapList.get(i).getKey() - i;
             totalLoss += Math.pow(distance, 2);
         }
 
-        double x= totalLoss / (Math.pow(mapList.size(), 3));
+        double x = totalLoss / (Math.pow(mapList.size(), 3));
 
         //total distance 越小， return数越大
         return -10 * Math.log(x + 0.00001f);
     }
 
     private void InitPopulation() {
-        for (int i=0; i < population; i++) {
+        for (int i = 0; i < population; i++) {
             populationList.add(randomUnitGenerator());
         }
     }

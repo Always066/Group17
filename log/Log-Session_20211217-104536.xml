@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome currentTime="Fri Dec 17 10:45:36 GMT 2021" timeOfAgreement="0.6557377049180327" lastAction="(Accept  bid:Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Ballroom, Invitations: Custom, Printed, Music: MP3, Cleanup: Water and Soap])" domain="etc/templates/partydomain/party_domain.xml" bids="78" runtime="0.402701917" finalOutcome="Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Ballroom, Invitations: Custom, Printed, Music: MP3, Cleanup: Water and Soap]" startingAgent="Agent17@6" deadline="60rounds">
+<resultsOfAgent agent="Agent17@6" agentDesc="Places random bids &gt;= 0.65" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="group17.Agent17" userUtility="0.8303823776342875" finalUtility="0.8303823776342875" discountedUtility="0.8303823776342875" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent26@7" agentDesc="just for fun!" utilspace="etc/templates/partydomain/party3_utility.xml" agentClass="group26.Agent26" userUtility="0.8336000145587017" finalUtility="0.8336000145587017" discountedUtility="0.8336000145587017" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>

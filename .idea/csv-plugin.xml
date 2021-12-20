@@ -2061,6 +2061,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/log/tournament-20211220-035110-party_domain.log.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

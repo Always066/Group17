@@ -1746,6 +1746,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/log/Log-Session_20211220-161812.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/log/Log-Session_20211221-014015.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/log/Log-Session_20211221-014029.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/log/tournament-20211214-105554-party_domain.log.csv">
           <value>
             <Attribute>
@@ -2062,6 +2083,13 @@
           </value>
         </entry>
         <entry key="/log/tournament-20211220-035110-party_domain.log.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/log/tournament-20211221-014048-party_domain.log.csv">
           <value>
             <Attribute>
               <option name="separator" value=";" />

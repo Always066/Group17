@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome currentTime="Tue Dec 21 01:40:29 GMT 2021" timeOfAgreement="0.8524590163934426" lastAction="(Accept  bid:Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap])" domain="etc/templates/partydomain/party_domain.xml" bids="102" runtime="0.112557799" finalOutcome="Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Your Dorm, Invitations: Plain, Music: MP3, Cleanup: Water and Soap]" startingAgent="BoulwareNegotiationParty@2" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty@2" agentDesc="Time-based agent" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" userUtility="0.6296765536818358" finalUtility="0.6296765536818358" discountedUtility="0.6296765536818358" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+<resultsOfAgent agent="AgreeableAgent2018BilateralVersion@3" agentDesc="Agreeable Agent 2018 University of Tehran" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="AgreeableAgent.AgreeableAgent2018BilateralVersion" userUtility="0.824820205695977" finalUtility="0.824820205695977" discountedUtility="0.824820205695977" discount="1.0" totalUserBother="0.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>

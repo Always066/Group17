@@ -456,6 +456,9 @@
             <partyRepItem classPath="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group26/Agent26.class" strategyParameters="">
                 <properties/>
             </partyRepItem>
+            <partyRepItem classPath="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/AgreeableAgent/AgreeableAgent2018BilateralVersion.class" strategyParameters="">
+                <properties/>
+            </partyRepItem>
         </partyRepItems>
         <domainRepItem/>
         <protocolRepItem/>

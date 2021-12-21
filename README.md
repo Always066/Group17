@@ -45,3 +45,15 @@
 5. 我们的测评方法很科学合理，有多重评价方式融合，对比了很多现有的模型。同时我们对于我们算法的不足有很好的讨论，探索出各种解决问题的方法。
 
 要求的原件在report文件夹里，这个报告值25%，大家要努力啊
+
+#### 12.21日更新
+在[这个文章中](https://link.springer.com/content/pdf/10.1007%2F978-3-030-17294-7_9.pdf) ,再次强调了搜索半径这个问题，
+其次也说明了，线性规划在限制用户偏好引出，有很强的作用，我认为用线性规划做限制，然后用启发式搜索算法进行搜索，加入模型建模。
+
+
+[Agreeable Agent](https://link.springer.com/article/10.1007/s10489-021-02638-2)
+
+[是否要进行偏好](https://homepages.cwi.nl/~baarslag/pub/The_Value_of_Information_in_Automated_Negotiation_A_Decision_Model_for_Eliciting_User_Preferences.pdf)
+用来确认是否应该进行偏好扩充
+
+速记：我认为在OrderedBids太少的情况下不适合给自己建模，因为及其不准。

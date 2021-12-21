@@ -149,6 +149,7 @@ public class AgreeableAgent2018BilateralVersion extends AbstractNegotiationParty
         Range range =
                 new Range(targetUtilityByTime - utilityThreshold, targetUtilityByTime + utilityThreshold);
         List<BidDetails> bidsInRange = outcomeSpace.getBidsinRange(range);
+        System.out.println(this.utilSpace);
         if (bidsInRange.size() == 1)
             return bidsInRange.get(0).getBid();
         int selectedBidIndex = getBestBidByRouletteWheel(bidsInRange);

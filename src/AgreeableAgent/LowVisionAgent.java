@@ -45,6 +45,7 @@ public class LowVisionAgent extends AbstractNegotiationParty {
     public void init(NegotiationInfo info) {
         super.init(info);
         this.utilSpace = info.getUtilitySpace();
+        System.out.println(utilSpace);
         outcomeSpace = new OutcomeSpace(utilSpace);
         domainSize = outcomeSpace.getAllOutcomes().size();
 

@@ -14,8 +14,8 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int populationScale = 2000;  //the scale of the population
-    private final int maxIteration = 100; // maximum of iteration number
+    private final int populationScale = 500;  //the scale of the population
+    private final int maxIteration = 150; // maximum of iteration number
     private final double rateOfMutation = 0.08;
     private final int numSelectedBids = 150;
     private Random random;

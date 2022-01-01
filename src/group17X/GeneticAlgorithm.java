@@ -14,14 +14,11 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int populationScale = 500;  //the scale of the population
-    private final int maxIteration = 170; // maximum of iteration number
+    private final int populationScale = 2000;  //the scale of the population
+    private final int maxIteration = 100; // maximum of iteration number
     private final double rateOfMutation = 0.08;
     private final int numSelectedBids = 150;
-    int tolerant = 20; // early stopping setting
-    int reformNumber = 5;
     private Random random;
-    boolean switchTolerant = true;
 
 
     private final UserModel userModel;
@@ -68,7 +65,7 @@ public class GeneticAlgorithm {
         }
 
         // rotate wheel algorithm
-        for (int i = 0; i < population.size() - eliteNumber; i++) {
+        for (int i = 0; i < populationScale - eliteNumber; i++) {
             double randNum = random.nextDouble() * sumFitness;
             double sum = 0.0;
             for (AbstractUtilitySpace abstractUtilitySpace : population) {
@@ -87,79 +84,37 @@ public class GeneticAlgorithm {
 
         //Early stopping variables
         double GeneuisFactor = 0.1;
-        AbstractUtilitySpace BEST = populationList.get(0);
+        AbstractUtilitySpace BEST;
         // end****setting
 
         for (int i = 0; i < maxIteration; i++) {
-            double sumError = 0;
             List<Double> scoreList = new ArrayList<>(); // store the fitness scores
-            List<AbstractUtilitySpace> totalFinalPopulation = new ArrayList<>();
-            List<AbstractUtilitySpace> selectedPopulation;
 
             for (AbstractUtilitySpace a : populationList) {
                 scoreList.add(calculateUtilityScore(a));
             }
-            selectedPopulation = chooseGoodPopulation(populationList, scoreList);
-
-            for (AbstractUtilitySpace abstractUtilitySpace : selectedPopulation) {
-                totalFinalPopulation.add(abstractUtilitySpace);
-                scoreList.add(calculateUtilityScore(abstractUtilitySpace));
+            populationList = chooseGoodPopulation(populationList, scoreList);
+            for (int j = 0; j < populationList.size() * rateOfMutation; j++) {
+                AdditiveUtilitySpace father =
+                        (AdditiveUtilitySpace) populationList.get(random.nextInt(populationScale));
+                AdditiveUtilitySpace mother =
+                        (AdditiveUtilitySpace) populationList.get(random.nextInt(populationScale));
+                AbstractUtilitySpace child = crossover(father, mother);
+                populationList.add(child);
             }
-
-            //分数排序
-            List<Double> orderedScore = new ArrayList<>(scoreList);
-            Collections.sort(orderedScore);
-            Collections.reverse(orderedScore);
-
-
-            for (int j = 0; j < selectedPopulation.size() * rateOfMutation; j++) {
-                while (true) {
-                    int FatherIndex;
-                    int MotherIndex;
-                    // 90%的概率他们的父母都是最优秀的
-                    if (new Random().nextDouble() > GeneuisFactor) {
-                        List<Double> goodParents = orderedScore.subList(0, orderedScore.size() / 5);
-                        int FatherNumber = new Random().nextInt(goodParents.size() - 1);
-                        Double FatherScore = goodParents.get(FatherNumber);
-                        FatherIndex = scoreList.indexOf(FatherScore);
-
-                        int MotherNumber = new Random().nextInt(goodParents.size() - 1);
-                        Double MotherScore = goodParents.get(MotherNumber);
-                        MotherIndex = scoreList.indexOf(MotherScore);
-                    } else {
-                        FatherIndex = random.nextInt(selectedPopulation.size() - 1);
-                        MotherIndex = random.nextInt(selectedPopulation.size() - 1);
-                    }
-                    if (FatherIndex != MotherIndex) {
-                        AdditiveUtilitySpace father =
-                                (AdditiveUtilitySpace) selectedPopulation.get(FatherIndex);
-                        AdditiveUtilitySpace mother =
-                                (AdditiveUtilitySpace) selectedPopulation.get(MotherIndex);
-                        AbstractUtilitySpace son = crossover(father, mother);
-                        totalFinalPopulation.add(son);
-                        scoreList.add(calculateUtilityScore(son));
-                        break;
-                    }
-                }
-            }
-            finalScoreList = scoreList;
-            populationList = totalFinalPopulation;
-            double bestScore = Collections.max(finalScoreList);
-            int index = finalScoreList.indexOf(bestScore);
-
-            if (calculateUtilityScore(populationList.get(index)) > calculateUtilityScore(BEST)) {
-                BEST = populationList.get(index);
-            }
+            if (i % (int)(maxIteration/5) == 0)
+                System.out.println("这是第" + i + "轮" + "，best score is:" + Collections.max(scoreList));
         }
 
+
+        for (AbstractUtilitySpace i : populationList) {
+            finalScoreList.add(calculateUtilityScore(i));
+        }
+        double bestScore = Collections.max(finalScoreList);
+        int index = finalScoreList.indexOf(bestScore);
+
+        BEST = populationList.get(index);
         return BEST;
-    }
-
-    private List<AdditiveUtilitySpace> getNiceParent(List<AbstractUtilitySpace> totalFinalPopulation, List<Double> scoreList) {
-        List<AdditiveUtilitySpace> outputList = new ArrayList<>();
-
-
-        return outputList;
     }
 
     private AbstractUtilitySpace crossover(AdditiveUtilitySpace father,

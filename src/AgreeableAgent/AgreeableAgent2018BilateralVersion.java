@@ -48,6 +48,8 @@ public class AgreeableAgent2018BilateralVersion extends AbstractNegotiationParty
         domainSize = outcomeSpace.getAllOutcomes().size();
 
         timeLineInfo = info.getTimeline();
+        System.out.println("This is our interior utility space");
+        System.out.println(info.getUtilitySpace());
         try {
             bestBid = info.getUtilitySpace().getMaxUtilityBid();
             pMin = utilitySpace.getUtility(utilitySpace.getMinUtilityBid());

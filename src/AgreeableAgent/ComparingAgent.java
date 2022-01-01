@@ -48,6 +48,7 @@ public class ComparingAgent extends AbstractNegotiationParty {
         domainSize = outcomeSpace.getAllOutcomes().size();
 
         timeLineInfo = info.getTimeline();
+        System.out.println(info.getUtilitySpace());
         try {
             bestBid = info.getUtilitySpace().getMaxUtilityBid();
             pMin = utilitySpace.getUtility(utilitySpace.getMinUtilityBid());

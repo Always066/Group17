@@ -14,20 +14,23 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int population = 4000;
-    private final int maxIteration = 200;
-    private final double rateOfMutation = 0.001;
+    private final int populationScale = 500;  //the scale of the population
+    private final int maxIteration = 170; // maximum of iteration number
+    private final double rateOfMutation = 0.08;
     private final int numSelectedBids = 150;
-    int tolerant = 20;
+    int tolerant = 20; // early stopping setting
     int reformNumber = 5;
+    private Random random;
     boolean switchTolerant = true;
 
 
     private final UserModel userModel;
-    private List<AbstractUtilitySpace> populationList = new ArrayList<>();
+    private List<AbstractUtilitySpace> populationList;
 
     public GeneticAlgorithm(NegotiationInfo info) {
         this.userModel = info.getUserModel();
+        random = new Random();
+        populationList = new ArrayList<AbstractUtilitySpace>();
     }
 
     public AbstractUtilitySpace mainFunction() {
@@ -39,79 +42,64 @@ public class GeneticAlgorithm {
         return bestUnit;
     }
 
-    private List<AbstractUtilitySpace> chooseGoodPopulation(List<Double> lossList) {
+    private List<AbstractUtilitySpace> chooseGoodPopulation(List<AbstractUtilitySpace> population
+            , List<Double> lossList) {
         List<AbstractUtilitySpace> chosenPopulation = new ArrayList<>();
-        List<Double> copyLossList = new ArrayList<>(lossList);
-        List<Double> orderedList = new ArrayList<>(copyLossList);
-        Collections.sort(orderedList);
-        Collections.reverse(orderedList);
-        int chosenNumber = 250; //选择多少种群
+        int eliteNumber = 10;
 
-        Random random = new Random();
-        double deletedNumber = -12345.6;
-
-        for (int i = 0; i < chosenNumber; i++) {
-            int index = copyLossList.indexOf(orderedList.get(i));
-            if (i > chosenNumber / 4) {
-                while (true) {
-                    int randomNumber = random.nextInt((populationList.size()) - i - 1) + i;
-                    if (copyLossList.get(randomNumber) != deletedNumber) {
-                        chosenPopulation.add(populationList.get(randomNumber));
-                        break;
-                    }
-                }
-            } else {
-
-                chosenPopulation.add(populationList.get(index));
-            }
+        // Copy the score list
+        List<Double> copyLossList = new ArrayList<>();
+        for (Double aDouble : lossList) {
+            copyLossList.add(aDouble);
         }
 
+        for (int i = 0; i < eliteNumber; i++) {
+            double maxFitness = Collections.max(copyLossList);
+            int index = copyLossList.indexOf(maxFitness);
+            chosenPopulation.add(population.get(index));
+
+            double temp = Double.MIN_VALUE;
+            copyLossList.set(index, temp);
+        }
+
+        double sumFitness = 0.0;
+        for (int i = 0; i < eliteNumber; i++) {
+            sumFitness += lossList.get(i);
+        }
+
+        // rotate wheel algorithm
+        for (int i = 0; i < population.size() - eliteNumber; i++) {
+            double randNum = random.nextDouble() * sumFitness;
+            double sum = 0.0;
+            for (AbstractUtilitySpace abstractUtilitySpace : population) {
+                sum += lossList.get(i);
+                if (sum > randNum) {
+                    chosenPopulation.add(abstractUtilitySpace);
+                    break;
+                }
+            }
+        }
         return chosenPopulation;
     }
 
     private AbstractUtilitySpace startIteration() {
-        Random random = new Random();
         List<Double> finalScoreList = new ArrayList<>();
+
+        //Early stopping variables
         double GeneuisFactor = 0.1;
-        double pastBestScore = 0;
-        int toleratedTimes = 0;
-        int reformedTimes = 0;
         AbstractUtilitySpace BEST = populationList.get(0);
+        // end****setting
 
         for (int i = 0; i < maxIteration; i++) {
             double sumError = 0;
-            List<Double> scoreList = new ArrayList<>();
+            List<Double> scoreList = new ArrayList<>(); // store the fitness scores
             List<AbstractUtilitySpace> totalFinalPopulation = new ArrayList<>();
-
             List<AbstractUtilitySpace> selectedPopulation;
-            List<Double> lossList = new ArrayList<>();
-            for (int p = 0; p < populationList.size(); p++) {
-                double loss = calculateUtilityScore(populationList.get(p));
-                sumError += loss;
-                lossList.add(loss);
-            }
-            GeneuisFactor = 0.1;
-            if (switchTolerant) {
-                if ((sumError / populationList.size()) - pastBestScore < 3) {
-                    toleratedTimes++;
-                    if (toleratedTimes > tolerant) {
-                        if (reformedTimes < reformNumber) {
-                            GeneuisFactor = 0.5;
-                            reformedTimes++;
-                            toleratedTimes = 0;
-                            System.out.println("开始变革");
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            }
 
-            pastBestScore = sumError / populationList.size();
-            if (i % 10 == 0)
-                System.out.println(i + " average error score: " + sumError / populationList.size());
-
-            selectedPopulation = chooseGoodPopulation(lossList);
+            for (AbstractUtilitySpace a : populationList) {
+                scoreList.add(calculateUtilityScore(a));
+            }
+            selectedPopulation = chooseGoodPopulation(populationList, scoreList);
 
             for (AbstractUtilitySpace abstractUtilitySpace : selectedPopulation) {
                 totalFinalPopulation.add(abstractUtilitySpace);
@@ -124,7 +112,7 @@ public class GeneticAlgorithm {
             Collections.reverse(orderedScore);
 
 
-            for (int j = 0; j < selectedPopulation.size() / 4; j++) {
+            for (int j = 0; j < selectedPopulation.size() * rateOfMutation; j++) {
                 while (true) {
                     int FatherIndex;
                     int MotherIndex;
@@ -143,8 +131,10 @@ public class GeneticAlgorithm {
                         MotherIndex = random.nextInt(selectedPopulation.size() - 1);
                     }
                     if (FatherIndex != MotherIndex) {
-                        AdditiveUtilitySpace father = (AdditiveUtilitySpace) selectedPopulation.get(FatherIndex);
-                        AdditiveUtilitySpace mother = (AdditiveUtilitySpace) selectedPopulation.get(MotherIndex);
+                        AdditiveUtilitySpace father =
+                                (AdditiveUtilitySpace) selectedPopulation.get(FatherIndex);
+                        AdditiveUtilitySpace mother =
+                                (AdditiveUtilitySpace) selectedPopulation.get(MotherIndex);
                         AbstractUtilitySpace son = crossover(father, mother);
                         totalFinalPopulation.add(son);
                         scoreList.add(calculateUtilityScore(son));
@@ -172,13 +162,15 @@ public class GeneticAlgorithm {
         return outputList;
     }
 
-    private AbstractUtilitySpace crossover(AdditiveUtilitySpace father, AdditiveUtilitySpace mother) {
+    private AbstractUtilitySpace crossover(AdditiveUtilitySpace father,
+                                           AdditiveUtilitySpace mother) {
         Random random = new Random();
 
         double fatherUtility = calculateUtilityScore(father);
         double motherUtility = calculateUtilityScore(mother);
 
-        AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(userModel.getDomain());
+        AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory =
+                new AdditiveUtilitySpaceFactory(userModel.getDomain());
         List<IssueDiscrete> issues = additiveUtilitySpaceFactory.getIssues();
 
         for (IssueDiscrete issue : issues) {
@@ -213,19 +205,23 @@ public class GeneticAlgorithm {
                 }
             }
             for (ValueDiscrete value : issue.getValues()) {
-                double fatherValueWeight = ((EvaluatorDiscrete) father.getEvaluator(issue)).getDoubleValue(value);
-                double motherValueWeight = ((EvaluatorDiscrete) mother.getEvaluator(issue)).getDoubleValue(value);
+                double fatherValueWeight =
+                        ((EvaluatorDiscrete) father.getEvaluator(issue)).getDoubleValue(value);
+                double motherValueWeight =
+                        ((EvaluatorDiscrete) mother.getEvaluator(issue)).getDoubleValue(value);
                 int randomValueNumber = random.nextInt(2);
                 if (fatherUtility >= motherUtility) {
                     if (randomValueNumber <= 0.65) {
                         if (random.nextDouble() <= rateOfMutation) {
-                            additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
+                            additiveUtilitySpaceFactory.setUtility(issue, value,
+                                    random.nextDouble() + 0.01);
                         } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, fatherValueWeight);
                         }
                     } else {
                         if (random.nextDouble() <= rateOfMutation) {
-                            additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
+                            additiveUtilitySpaceFactory.setUtility(issue, value,
+                                    random.nextDouble() + 0.01);
                         } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, motherValueWeight);
                         }
@@ -233,13 +229,15 @@ public class GeneticAlgorithm {
                 } else {
                     if (randomValueNumber > 0.65) {
                         if (random.nextDouble() <= rateOfMutation) {
-                            additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
+                            additiveUtilitySpaceFactory.setUtility(issue, value,
+                                    random.nextDouble() + 0.01);
                         } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, fatherValueWeight);
                         }
                     } else {
                         if (random.nextDouble() <= rateOfMutation) {
-                            additiveUtilitySpaceFactory.setUtility(issue, value, random.nextDouble() + 0.01);
+                            additiveUtilitySpaceFactory.setUtility(issue, value,
+                                    random.nextDouble() + 0.01);
                         } else {
                             additiveUtilitySpaceFactory.setUtility(issue, value, motherValueWeight);
                         }
@@ -275,7 +273,8 @@ public class GeneticAlgorithm {
             order++;
         }
 
-        List<Map.Entry<Integer, Double>> mapList = new ArrayList<Map.Entry<Integer, Double>>(selectedUtilityMap.entrySet());
+        List<Map.Entry<Integer, Double>> mapList =
+                new ArrayList<Map.Entry<Integer, Double>>(selectedUtilityMap.entrySet());
         Collections.sort(mapList, new Comparator<Map.Entry<Integer, Double>>() {
             @Override
             public int compare(Map.Entry<Integer, Double> o1, Map.Entry<Integer, Double> o2) {
@@ -295,7 +294,7 @@ public class GeneticAlgorithm {
     }
 
     private void InitPopulation() {
-        for (int i = 0; i < population; i++) {
+        for (int i = 0; i < populationScale; i++) {
             populationList.add(randomUnitGenerator());
         }
     }
@@ -304,7 +303,8 @@ public class GeneticAlgorithm {
         List<Issue> issues;
         Random random = new Random();
 
-        AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(userModel.getDomain());
+        AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory =
+                new AdditiveUtilitySpaceFactory(userModel.getDomain());
         issues = additiveUtilitySpaceFactory.getDomain().getIssues();
 
         for (Issue issue : issues) {

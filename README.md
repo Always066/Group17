@@ -57,3 +57,5 @@
 用来确认是否应该进行偏好扩充
 
 速记：我认为在OrderedBids太少的情况下不适合给自己建模，因为及其不准。
+
+[我们参考学长的blog链接在这里](https://robinluonanjing.github.io/UoSouthampton-Intelligent-Agent-Docs)

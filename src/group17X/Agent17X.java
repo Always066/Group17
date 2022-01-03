@@ -1,6 +1,7 @@
 package group17X;
 
 import AgreeableAgent.Constants;
+import AgreeableAgent.FrequencyBasedOpponentModel;
 import genius.core.AgentID;
 import genius.core.Bid;
 import genius.core.actions.Accept;
@@ -28,7 +29,7 @@ public class Agent17X extends AbstractNegotiationParty {
     private double pMax;
     private Bid bestBid;
     private GeneticAlgorithm geneAlgorithm;
-    private MyJonnyBlack opponentModel;
+    private JohnnyBlackComponentModel opponentModel;
     private double timeForUsingModel = 0.1;
     private int opponentBidCount = 0;
     private Bid lastReceivedOffer;
@@ -62,7 +63,8 @@ public class Agent17X extends AbstractNegotiationParty {
 
         if (isAllIssuesDiscrete()) {
             determineTimeForUsingModel();
-            opponentModel = new MyJonnyBlack(info);
+            opponentModel = new JohnnyBlackComponentModel();
+            opponentModel.init(userUtilSpace.getDomain().getIssues());
         }
     }
 
@@ -72,7 +74,7 @@ public class Agent17X extends AbstractNegotiationParty {
         if (lasterOpponentAction instanceof Offer) {
             Bid bid = ((Offer) lasterOpponentAction).getBid();
             opponentBidCount++;
-            opponentModel.calculateJonnyBlack(bid);
+            opponentModel.updateModel(bid,opponentBidCount);
             lastReceivedOffer = bid;
         }
     }
@@ -87,6 +89,7 @@ public class Agent17X extends AbstractNegotiationParty {
                 else
                     return new Offer(getPartyId(),myBid);
             }catch (Exception e){
+                System.out.println(e);
                 return new Offer(getPartyId(),bestBid);
             }
         }else{
@@ -162,7 +165,7 @@ public class Agent17X extends AbstractNegotiationParty {
         double totalUtility = 0;
         for (int i = 0; i < size; i++) {
             BidDetails bidDetails = bidsInRange.get(i);
-            double sum = opponentModel.predictValuation(bidDetails.getBid());
+            double sum = opponentModel.getUtility(bidDetails.getBid());
             sumOfTwoUtilitiesForBid[i] = sum;
             totalUtility += sum;
         }

@@ -1949,6 +1949,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/log/Log-Session_20220101-163249.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/log/Log-Session_20220101-163335.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/log/tournament-20211214-105554-party_domain.log.csv">
           <value>
             <Attribute>

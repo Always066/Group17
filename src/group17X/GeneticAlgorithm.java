@@ -102,7 +102,7 @@ public class GeneticAlgorithm {
                 AbstractUtilitySpace child = crossover(father, mother);
                 populationList.add(child);
             }
-            if (i % (int)(maxIteration/5) == 0)
+            if (i % (int) ((maxIteration + 1) / 5) == 0)
                 System.out.println("这是第" + i + "轮" + "，best score is:" + Collections.max(scoreList));
         }
 

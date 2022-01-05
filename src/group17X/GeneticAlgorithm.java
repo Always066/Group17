@@ -14,7 +14,7 @@ import genius.core.utility.EvaluatorDiscrete;
 import java.util.*;
 
 public class GeneticAlgorithm {
-    private final int populationScale = 500;  //the scale of the population
+    private final int populationScale = 3000;  //the scale of the population
     private final int maxIteration = 150; // maximum of iteration number
     private final double rateOfMutation = 0.08;
     private final int numSelectedBids = 150;
@@ -110,7 +110,7 @@ public class GeneticAlgorithm {
                 currentTolerance = 0;
             } else {
                 if (currentTolerance > tolerance) {
-                    System.out.println("已经达到最大忍耐程度，跳出循环"+currentTolerance);
+                    System.out.println("已经达到最大忍耐程度，跳出循环" + currentTolerance);
                     break;
                 } else {
                     currentTolerance++;
@@ -253,10 +253,11 @@ public class GeneticAlgorithm {
 
         for (int i = 0; i < mapList.size(); i++) {
             int distance = mapList.get(i).getKey() - i;
-            totalLoss += Math.pow(distance,2.0);
+            totalLoss += Math.pow(distance, 2.0);
         }
 
         double x = totalLoss / (Math.pow(mapList.size(), 3));
+
 
         //total distance 越小， return数越大
         return -10 * Math.log(x + 0.00001f);

@@ -83,10 +83,12 @@ public class GeneticAlgorithm {
         List<Double> finalScoreList = new ArrayList<>();
 
         //Early stopping variables
-        double GeneuisFactor = 0.1;
+        int tolerance = 10;
         AbstractUtilitySpace BEST;
+        double bestScore = 0;
+        int currentTolerance = 0;
+        double difference = 2;
         // end****setting
-
         for (int i = 0; i < maxIteration; i++) {
             List<Double> scoreList = new ArrayList<>(); // store the fitness scores
 
@@ -102,6 +104,18 @@ public class GeneticAlgorithm {
                 AbstractUtilitySpace child = crossover(father, mother);
                 populationList.add(child);
             }
+            double currentScore = Collections.max(scoreList);
+            if (currentScore - bestScore > difference) {
+                bestScore = currentScore;
+                currentTolerance = 0;
+            } else {
+                if (currentTolerance > tolerance) {
+                    System.out.println("已经达到最大忍耐程度，跳出循环"+currentTolerance);
+                    break;
+                } else {
+                    currentTolerance++;
+                }
+            }
             if (i % (int) ((maxIteration + 1) / 5) == 0)
                 System.out.println("这是第" + i + "轮" + "，best score is:" + Collections.max(scoreList));
         }
@@ -110,7 +124,7 @@ public class GeneticAlgorithm {
         for (AbstractUtilitySpace i : populationList) {
             finalScoreList.add(calculateUtilityScore(i));
         }
-        double bestScore = Collections.max(finalScoreList);
+        bestScore = Collections.max(finalScoreList);
         int index = finalScoreList.indexOf(bestScore);
 
         BEST = populationList.get(index);
@@ -239,7 +253,7 @@ public class GeneticAlgorithm {
 
         for (int i = 0; i < mapList.size(); i++) {
             int distance = mapList.get(i).getKey() - i;
-            totalLoss += Math.pow(distance, 2);
+            totalLoss += Math.pow(distance,2.0);
         }
 
         double x = totalLoss / (Math.pow(mapList.size(), 3));

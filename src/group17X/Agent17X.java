@@ -39,8 +39,11 @@ public class Agent17X extends AbstractNegotiationParty {
     public void init(NegotiationInfo info) {
         super.init(info);
 
+        outcomeSpace = new OutcomeSpace(utilitySpace);
+        domainSize = outcomeSpace.getAllOutcomes().size();
+
         //if this is an uncertainty case, we could use User Model Algorithm
-        if (hasPreferenceUncertainty()) {
+        if (hasPreferenceUncertainty() && ifUseUserModel()) {
             try { //except the failure of userModel Algorithm
                 geneAlgorithm = new GeneticAlgorithm(info);
                 this.userUtilSpace = geneAlgorithm.mainFunction();
@@ -50,8 +53,6 @@ public class Agent17X extends AbstractNegotiationParty {
         } else {
             this.userUtilSpace = info.getUtilitySpace();
         }
-        outcomeSpace = new OutcomeSpace(utilitySpace);
-        domainSize = outcomeSpace.getAllOutcomes().size();
 
         try {
             bestBid = info.getUtilitySpace().getMaxUtilityBid();
@@ -68,13 +69,23 @@ public class Agent17X extends AbstractNegotiationParty {
         }
     }
 
+    private boolean ifUseUserModel() {
+        // 如果已知的offer数量小于百分之5，不对用户进行建模
+        if (userModel.getBidRanking().getBidOrder().size() < domainSize / 100 * 5) {
+            System.out.println("已知的bids数量太少，不进行建模");
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public void receiveMessage(AgentID sender, Action lasterOpponentAction) {
         super.receiveMessage(sender, lasterOpponentAction);
         if (lasterOpponentAction instanceof Offer) {
             Bid bid = ((Offer) lasterOpponentAction).getBid();
             opponentBidCount++;
-            opponentModel.updateModel(bid,opponentBidCount);
+            opponentModel.updateModel(bid, opponentBidCount);
             lastReceivedOffer = bid;
         }
     }
@@ -82,27 +93,27 @@ public class Agent17X extends AbstractNegotiationParty {
     @Override
     public Action chooseAction(List<Class<? extends Action>> possibleActions) {
         if (lastReceivedOffer != null) {
-            try{
+            try {
                 Bid myBid = getNextBid();
-                if (isAcceptable(getUtility(lastReceivedOffer),getUtility(myBid)))
-                    return new Accept(getPartyId(),lastReceivedOffer);
+                if (isAcceptable(getUtility(lastReceivedOffer), getUtility(myBid)))
+                    return new Accept(getPartyId(), lastReceivedOffer);
                 else
-                    return new Offer(getPartyId(),myBid);
-            }catch (Exception e){
-                System.out.println(e);
-                return new Offer(getPartyId(),bestBid);
+                    return new Offer(getPartyId(), myBid);
+            } catch (Exception e) {
+//                System.out.println(e);
+                return new Offer(getPartyId(), bestBid);
             }
-        }else{
-            return new Offer(getPartyId(),bestBid);
+        } else {
+            return new Offer(getPartyId(), bestBid);
         }
     }
 
-    private boolean isAcceptable(double opponentUtility, double myBidUtilityBytime){
-        if (opponentUtility >= myBidUtilityBytime){
+    private boolean isAcceptable(double opponentUtility, double myBidUtilityBytime) {
+        if (opponentUtility >= myBidUtilityBytime) {
             return true;
         }
         double time = getTimeLine().getTime();
-        boolean out = time>=0.99 && opponentUtility>=userUtilSpace.getReservationValue();
+        boolean out = time >= 0.99 && opponentUtility >= userUtilSpace.getReservationValue();
         return out;
     }
 
@@ -151,7 +162,6 @@ public class Agent17X extends AbstractNegotiationParty {
         Range range = new Range(targetUtility - utilityThreshold,
                 targetUtility + utilityThreshold);
         List<BidDetails> bidsInRange = outcomeSpace.getBidsinRange(range);
-        System.out.println(this.userUtilSpace);
         if (bidsInRange.size() == 1) {
             return bidsInRange.get(0).getBid();
         }

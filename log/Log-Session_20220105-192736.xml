@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Agent17X@11:java.lang.IndexOutOfBoundsException: Index: 0, Size: 0: Index: 0, Size: 0" currentTime="Wed Jan 05 19:27:36 GMT 2022" lastAction="(Offer  bid:Bid[Food: Chips and Nuts, Drinks: Handmade Cocktails, Location: Party Room, Invitations: Custom, Printed, Music: DJ, Cleanup: Water and Soap])" bids="59" runtime="0.043972539" deadline="60rounds">
+<resultsOfAgent agent="BoulwareNegotiationParty" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="negotiator.parties.BoulwareNegotiationParty" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="Agent17X" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="/Users/hewenyu/Desktop/Intelligent Agent/Labs/Group17/out/production/Group17/group17X/Agent17X.class" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>

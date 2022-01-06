@@ -242,6 +242,7 @@ public class GeneticAlgorithm {
             order++;
         }
 
+        // List 里面是一个一个map,key值是真实的排序，value是被测试utility对于所有Bid的预测
         List<Map.Entry<Integer, Double>> mapList =
                 new ArrayList<Map.Entry<Integer, Double>>(selectedUtilityMap.entrySet());
         Collections.sort(mapList, new Comparator<Map.Entry<Integer, Double>>() {

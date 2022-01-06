@@ -1,69 +1,133 @@
-<?xml version="1.0"?>
-<utility_space>
-  <objective index="0" description="" name="root" type="objective" etype="objective">
-    <issue index="1" name="Atmosphere" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Cultural heritage" cost="0.0" evaluation="52" />
-      <item index="2" value="Local traditions" cost="0.0" evaluation="52" />
-      <item index="3" value="Political stability" cost="0.0" evaluation="42" />
-      <item index="4" value="Security (personal)" cost="0.0" evaluation="42" />
-      <item index="5" value="Liveliness" cost="0.0" evaluation="58" />
-      <item index="6" value="Turistic activities" cost="0.0" evaluation="478" />
-      <item index="7" value="Hospitality" cost="0.0" evaluation="276" />
-    </issue>
-    <issue index="2" name="Amusement" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Nightlife and entertainment" cost="0.0" evaluation="389" />
-      <item index="2" value="Nightclubs" cost="0.0" evaluation="224" />
-      <item index="3" value="Excursion" cost="0.0" evaluation="34" />
-      <item index="4" value="Casinos" cost="0.0" evaluation="38" />
-      <item index="5" value="Zoo" cost="0.0" evaluation="43" />
-      <item index="6" value="Festivals" cost="0.0" evaluation="224" />
-      <item index="7" value="Amusement park" cost="0.0" evaluation="47" />
-    </issue>
-    <issue index="3" name="Culinary" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Local cuisine" cost="0.0" evaluation="250" />
-      <item index="2" value="Lunch facilities" cost="0.0" evaluation="353" />
-      <item index="3" value="International cuisine" cost="0.0" evaluation="353" />
-      <item index="4" value="Cooking workshops" cost="0.0" evaluation="42" />
-    </issue>
-    <issue index="4" name="Shopping" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Shopping malls" cost="0.0" evaluation="360" />
-      <item index="2" value="Markets" cost="0.0" evaluation="508" />
-      <item index="3" value="Streets" cost="0.0" evaluation="61" />
-      <item index="4" value="Small boutiques" cost="0.0" evaluation="70" />
-    </issue>
-    <issue index="5" name="Culture" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Museum" cost="0.0" evaluation="46" />
-      <item index="2" value="Music hall" cost="0.0" evaluation="271" />
-      <item index="3" value="Theater" cost="0.0" evaluation="42" />
-      <item index="4" value="Art gallery" cost="0.0" evaluation="221" />
-      <item index="5" value="Cinema" cost="0.0" evaluation="382" />
-      <item index="6" value="Congress center" cost="0.0" evaluation="38" />
-    </issue>
-    <issue index="6" name="Sport" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Bike tours" cost="0.0" evaluation="481" />
-      <item index="2" value="Hiking" cost="0.0" evaluation="53" />
-      <item index="3" value="Indoor activities" cost="0.0" evaluation="66" />
-      <item index="4" value="Outdoor activities" cost="0.0" evaluation="341" />
-      <item index="5" value="Adventure" cost="0.0" evaluation="58" />
-    </issue>
-    <issue index="7" name="Environment" vtype="discrete" type="discrete" etype="discrete">
-      <item index="1" value="Parks and Gardens" cost="0.0" evaluation="26" />
-      <item index="2" value="Square" cost="0.0" evaluation="264" />
-      <item index="3" value="Historical places" cost="0.0" evaluation="187" />
-      <item index="4" value="See, river, etc." cost="0.0" evaluation="152" />
-      <item index="5" value="Monuments" cost="0.0" evaluation="187" />
-      <item index="6" value="Special streets" cost="0.0" evaluation="22" />
-      <item index="7" value="Palace" cost="0.0" evaluation="29" />
-      <item index="8" value="Landscape and nature" cost="0.0" evaluation="132" />
-    </issue>
-    <weight index="1" value="0.21223021916844162" />
-    <weight index="2" value="0.037281943228254254" />
-    <weight index="3" value="0.2610790617438959" />
-    <weight index="4" value="0.043071469925015246" />
-    <weight index="5" value="0.04701814200635607" />
-    <weight index="6" value="0.028014188614461887" />
-    <weight index="7" value="0.371304975313575" />
-  </objective>
-  <discount_factor value="0.75" />
-<reservation value="0.50" />
-</utility_space>
+<utility_space type="UNCERTAIN"> 
+<objective name="root" index="0" description="" etype="objective" type="objective"> 
+<issue vtype="discrete" name="Atmosphere" index="1" etype="discrete" type="discrete"> 
+<item evaluation="52.0" index="1" value="Cultural heritage"> 
+</item> 
+<item evaluation="52.0" index="2" value="Local traditions"> 
+</item> 
+<item evaluation="42.0" index="3" value="Political stability"> 
+</item> 
+<item evaluation="42.0" index="4" value="Security (personal)"> 
+</item> 
+<item evaluation="58.0" index="5" value="Liveliness"> 
+</item> 
+<item evaluation="478.0" index="6" value="Turistic activities"> 
+</item> 
+<item evaluation="276.0" index="7" value="Hospitality"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Amusement" index="2" etype="discrete" type="discrete"> 
+<item evaluation="389.0" index="1" value="Nightlife and entertainment"> 
+</item> 
+<item evaluation="224.0" index="2" value="Nightclubs"> 
+</item> 
+<item evaluation="34.0" index="3" value="Excursion"> 
+</item> 
+<item evaluation="38.0" index="4" value="Casinos"> 
+</item> 
+<item evaluation="43.0" index="5" value="Zoo"> 
+</item> 
+<item evaluation="224.0" index="6" value="Festivals"> 
+</item> 
+<item evaluation="47.0" index="7" value="Amusement park"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Culinary" index="3" etype="discrete" type="discrete"> 
+<item evaluation="250.0" index="1" value="Local cuisine"> 
+</item> 
+<item evaluation="353.0" index="2" value="Lunch facilities"> 
+</item> 
+<item evaluation="353.0" index="3" value="International cuisine"> 
+</item> 
+<item evaluation="42.0" index="4" value="Cooking workshops"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Shopping" index="4" etype="discrete" type="discrete"> 
+<item evaluation="360.0" index="1" value="Shopping malls"> 
+</item> 
+<item evaluation="508.0" index="2" value="Markets"> 
+</item> 
+<item evaluation="61.0" index="3" value="Streets"> 
+</item> 
+<item evaluation="70.0" index="4" value="Small boutiques"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Culture" index="5" etype="discrete" type="discrete"> 
+<item evaluation="46.0" index="1" value="Museum"> 
+</item> 
+<item evaluation="271.0" index="2" value="Music hall"> 
+</item> 
+<item evaluation="42.0" index="3" value="Theater"> 
+</item> 
+<item evaluation="221.0" index="4" value="Art gallery"> 
+</item> 
+<item evaluation="382.0" index="5" value="Cinema"> 
+</item> 
+<item evaluation="38.0" index="6" value="Congress center"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Sport" index="6" etype="discrete" type="discrete"> 
+<item evaluation="481.0" index="1" value="Bike tours"> 
+</item> 
+<item evaluation="53.0" index="2" value="Hiking"> 
+</item> 
+<item evaluation="66.0" index="3" value="Indoor activities"> 
+</item> 
+<item evaluation="341.0" index="4" value="Outdoor activities"> 
+</item> 
+<item evaluation="58.0" index="5" value="Adventure"> 
+</item> 
+</issue> 
+<issue vtype="discrete" name="Environment" index="7" etype="discrete" type="discrete"> 
+<item evaluation="26.0" index="1" value="Parks and Gardens"> 
+</item> 
+<item evaluation="264.0" index="2" value="Square"> 
+</item> 
+<item evaluation="187.0" index="3" value="Historical places"> 
+</item> 
+<item evaluation="152.0" index="4" value="See, river, etc."> 
+</item> 
+<item evaluation="187.0" index="5" value="Monuments"> 
+</item> 
+<item evaluation="22.0" index="6" value="Special streets"> 
+</item> 
+<item evaluation="29.0" index="7" value="Palace"> 
+</item> 
+<item evaluation="132.0" index="8" value="Landscape and nature"> 
+</item> 
+</issue> 
+<weight index="1" value="0.21231768225249273"> 
+</weight> 
+<weight index="2" value="0.03708528507773428"> 
+</weight> 
+<weight index="3" value="0.2612796575436962"> 
+</weight> 
+<weight index="4" value="0.04305966102223421"> 
+</weight> 
+<weight index="5" value="0.04705402463716563"> 
+</weight> 
+<weight index="6" value="0.028036595063342794"> 
+</weight> 
+<weight index="7" value="0.3711670944033342"> 
+</weight> 
+</objective> 
+<discount_factor value="0.75"> 
+</discount_factor> 
+<reservation value="0.5"> 
+</reservation> 
+<comparisons> 
+70000 
+</comparisons> 
+<errors> 
+0 
+</errors> 
+<elicitation_cost> 
+0.0 
+</elicitation_cost> 
+<fixed_seed> 
+true 
+</fixed_seed> 
+<experimental> 
+false 
+</experimental> 
+</utility_space> 

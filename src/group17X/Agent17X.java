@@ -29,7 +29,7 @@ public class Agent17X extends AbstractNegotiationParty {
     private double pMax;
     private Bid bestBid;
     private GeneticAlgorithm geneAlgorithm;
-    private JohnnyBlackComponentModel opponentModel;
+    private FrequencyBasedOpponentModel opponentModel;
     private double timeForUsingModel = 0.1;
     private int opponentBidCount = 0;
     private Bid lastReceivedOffer;
@@ -64,7 +64,7 @@ public class Agent17X extends AbstractNegotiationParty {
 
         if (isAllIssuesDiscrete()) {
             determineTimeForUsingModel();
-            opponentModel = new JohnnyBlackComponentModel();
+            opponentModel = new FrequencyBasedOpponentModel();
             opponentModel.init(userUtilSpace.getDomain().getIssues());
         }
     }
